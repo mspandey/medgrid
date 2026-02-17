@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediGrid — System Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --surface2: #f1f3f5;
+      --border: #e2e8f0;
+      --border2: #cbd5e1;
+
+      --primary: #D80032;
+      /* Deep Red */
+      --primary-light: #fff0f3;
+      --primary-dark: #b9002d;
+
+      --green: #0ca678;
+      --green-light: #e6fcf5;
+      --amber: #f59f00;
+      --amber-light: #fff9db;
+      --red: #D80032;
+      --red-light: #fff0f3;
+      --blue: #D80032;
+      /* Remapped Blue to Primary Red for consistency */
+      --blue-light: #fff0f3;
+
+      --text: #2B2D42;
+      --text2: #555b6e;
+      --text3: #8D99AE;
+
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Plus Jakarta Sans', monospace;
+      /* Simplified fonts */
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ── */
+    #app {
+      display: none;
+    }
+
+    #app.show {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: #fff;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--border);
+      z-index: 50;
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-hex {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .sb-brand {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .sb-sub {
+      font-size: 0.75rem;
+      color: var(--text3);
+      font-weight: 500;
+    }
+
+    .sb-section {
+      padding: 24px 24px 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text3);
+      letter-spacing: 0.5px;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--text2);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-left: 3px solid transparent;
+    }
+
+    .sb-item:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .sb-item.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-left-color: var(--primary);
+    }
+
+    .sb-badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .sb-footer {
+      margin-top: auto;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sb-user-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .sb-user-role {
+      font-size: 0.75rem;
+      color: var(--text3);
+    }
+
+    .sb-signout {
+      margin-top: 12px;
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .sb-signout:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .topbar-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--green-light);
+      color: var(--green);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .live-dot2 {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: blink 1.5s infinite;
+    }
+
+    .content {
+      padding: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page {
+      display: none;
+      animation: fadein 0.3s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* ── COMPONENTS ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .stat-sub {
+      font-size: 0.85rem;
+      color: var(--text3);
+    }
+
+    /* Colors for stats matching theme */
+    .stat-card.green .stat-num {
+      color: var(--green);
+    }
+
+    .stat-card.amber .stat-num {
+      color: var(--amber);
+    }
+
+    .stat-card.red .stat-num {
+      color: var(--primary);
+    }
+
+    .stat-card.blue .stat-num {
+      color: var(--text);
+    }
+
+    /* Cards & Tables */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .card-hdr {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    table.data-table thead th {
+      background: var(--surface2);
+      padding: 14px 24px;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table.data-table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+      font-weight: 500;
+    }
+
+    table.data-table tr:hover {
+      background: #f8fafc;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .badge-green {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .badge-amber {
+      background: var(--amber-light);
+      color: var(--amber);
+    }
+
+    .badge-red {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .badge-blue {
+      background: #e7f5ff;
+      color: #0077ff;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(216, 0, 50, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+    }
+
+    /* Modals & Inputs */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.hidden {
+      display: none;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-hdr {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    /* Config Modal Specifics */
+    #cfg-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #cfg-modal.hidden {
+      display: none;
+    }
+
+    .cfg-box {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .cfg-logo {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .cfg-connect {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .cfg-connect:hover {
+      background: var(--primary-dark);
+    }
+  </style>
+
+
+  .modal-title {
+  font-size: 1rem;
+  font-weight: 700;
+  }
+
+  .modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--text3);
+  line-height: 1;
+  }
+
+  .modal-body {
+  padding: 24px;
+  }
+
+  .modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  }
+
+  /* Blood bars */
+  .blood-grid-admin {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  }
+
+  .blood-card-admin {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  }
+
+  .blood-card-admin:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  }
+
+  .bca-type {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+  }
+
+  .bca-units {
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-bottom: 8px;
+  }
+
+  .bca-bar {
+  height: 7px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  }
+
+  .bca-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s;
+  }
+
+  /* Dispatch timeline */
+  .timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  }
+
+  .tl-item {
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  position: relative;
+  }
+
+  .tl-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 36px;
+  bottom: -10px;
+  width: 2px;
+  background: var(--border);
+  }
+
+  .tl-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  border: 2px solid;
+  }
+
+  .tl-dot.done {
+  background: var(--green-light);
+  border-color: var(--green);
+  }
+
+  .tl-dot.active {
+  background: var(--amber-light);
+  border-color: var(--amber);
+  }
+
+  .tl-dot.pending {
+  background: var(--bg);
+  border-color: var(--border2);
+  }
+
+  .tl-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 4px;
+  }
+
+  .tl-time {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text3);
+  margin-top: 2px;
+  }
+
+  /* Beds grid admin */
+  .beds-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  }
+
+  .bed-admin {
+  border: 1.5px solid;
+  border-radius: 6px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  }
+
+  .bed-admin:hover {
+  transform: scale(1.03);
+  }
+
+  .bed-admin.available {
+  border-color: #86efac;
+  background: #f0fdf4;
+  }
+
+  .bed-admin.occupied {
+  border-color: #fca5a5;
+  background: #fff5f5;
+  }
+
+  .bed-admin.maintenance {
+  border-color: #fcd34d;
+  background: #fffbeb;
+  }
+
+  .bed-admin.reserved {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  }
+
+  .ba-code {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 3px;
+  }
+
+  .ba-status {
+  font-size: 0.65rem;
+  font-weight: 600;
+  }
+
+  .bed-admin.available .ba-code {
+  color: var(--green);
+  }
+
+  .bed-admin.occupied .ba-code {
+  color: var(--red);
+  }
+
+  .bed-admin.maintenance .ba-code {
+  color: var(--amber);
+  }
+
+  .bed-admin.reserved .ba-code {
+  color: var(--blue);
+  }
+
+  /* Notification toast */
+  .toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1e293b;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 9000;
+  animation: toast-in 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  }
+
+  .toast.hidden {
+  display: none;
+  }
+
+  @keyframes toast-in {
+  from {
+  opacity: 0;
+  transform: translateY(10px);
+  }
+
+  to {
+  opacity: 1;
+  transform: none;
+  }
+  }
+
+  /* Loading spinner */
+  .spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+  }
+
+  @keyframes spin {
+  to {
+  transform: rotate(360deg);
+  }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+  background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════
+  SUPABASE CONFIG MODAL
+══════════════════════════════════ -->
+  <div id="cfg-modal">
+    <div class="cfg-box">
+      <div class="cfg-logo"></div>
+      <div class="cfg-title">Connect to Supabase</div>
+      <div class="cfg-sub">Enter your Supabase project credentials to connect the MediGrid admin panel to your live
+        database.</div>
+
+      <label class="cfg-label">Supabase Project URL</label>
+      <input class="cfg-input" id="sb-url" placeholder="https://xxxxxxxxxxxx.supabase.co" type="url">
+
+      <label class="cfg-label">Supabase Anon Key</label>
+      <input class="cfg-input" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." type="password">
+
+      <div id="cfg-error" class="alert-banner error" style="display:none;"></div>
+
+      <button class="cfg-connect" onclick="connectSupabase()">
+        <span id="connect-label">Connect & Enter Admin Panel</span>
+      </button>
+      <button class="cfg-demo" onclick="loadDemo()">▶ Load with Demo Data (no database)</button>
+
+      <div class="cfg-note">
+        New to Supabase? <a href="https://supabase.com" target="_blank">Create a free project →</a><br>
+        Run <strong>schema.sql</strong> then <strong>seed.sql</strong> in your SQL Editor first.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+  MAIN APP
+══════════════════════════════════ -->
+  <div id="app">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-hex"></div>
+        <div>
+          <div class="sb-brand">MEDIGRID</div>
+          <div class="sb-sub">SYSTEM ADMIN</div>
+        </div>
+      </div>
+
+      <div class="sb-section">Overview</div>
+      <div class="sb-item active" onclick="showPage('dashboard',this)">
+        <span class="sb-item-icon">📊</span>
+        <span class="sb-item-label">Dashboard</span>
+      </div>
+      <div class="sb-item" onclick="showPage('alerts-page',this)">
+        <span class="sb-item-icon">🚨</span>
+        <span class="sb-item-label">Alerts</span>
+        <span class="sb-badge" id="sb-alert-count">3</span>
+      </div>
+
+      <div class="sb-section">Hospital</div>
+      <div class="sb-item" onclick="showPage('hospitals-page',this)">
+        <span class="sb-item-icon">🏥</span>
+        <span class="sb-item-label">Hospitals</span>
+      </div>
+      <div class="sb-item" onclick="showPage('beds-page',this)">
+        <span class="sb-item-icon">🛏</span>
+        <span class="sb-item-label">Beds & Departments</span>
+      </div>
+
+      <div class="sb-section">Resources</div>
+      <div class="sb-item" onclick="showPage('blood-page',this)">
+        <span class="sb-item-icon">🩸</span>
+        <span class="sb-item-label">Blood Bank</span>
+      </div>
+      <div class="sb-item" onclick="showPage('ambulance-page',this)">
+        <span class="sb-item-icon">🚑</span>
+        <span class="sb-item-label">Ambulances</span>
+      </div>
+
+      <div class="sb-section">Dispatch</div>
+      <div class="sb-item" onclick="showPage('dispatch-page',this)">
+        <span class="sb-item-icon">📡</span>
+        <span class="sb-item-label">Dispatch Records</span>
+      </div>
+
+      <div class="sb-footer">
+        <div class="sb-user-name" id="sb-user-name">Admin User</div>
+        <div class="sb-user-role" id="sb-user-role">HOSPITAL ADMIN</div>
+        <button class="sb-signout" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="topbar">
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-right">
+          <div class="live-badge">
+            <div class="live-dot2"></div>LIVE
+          </div>
+          <div class="topbar-clock" id="admin-clock">--:--:--</div>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- ── DASHBOARD ── -->
+        <div class="page active" id="page-dashboard">
+          <div class="page-title">District Overview</div>
+          <div class="page-sub">Real-time snapshot across all hospitals and resources.</div>
+
+          <div class="stat-row" id="dash-stats">
+            <div class="stat-card green">
+              <div class="stat-label">Total Available Beds</div>
+              <div class="stat-num" id="ds-avail">—</div>
+              <div class="stat-sub">district-wide</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-label">Critical Facilities</div>
+              <div class="stat-num" id="ds-crit">—</div>
+              <div class="stat-sub">at or near 100%</div>
+            </div>
+            <div class="stat-card blue">
+              <div class="stat-label">Active Dispatches</div>
+              <div class="stat-num" id="ds-disp">—</div>
+              <div class="stat-sub">en route / on scene</div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-label">Blood Alerts</div>
+              <div class="stat-num" id="ds-blood">—</div>
+              <div class="stat-sub">low / critical types</div>
+            </div>
+          </div>
+
+          <!-- Active alerts -->
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title">🚨 Active Alerts</div><button class="btn btn-outline btn-sm"
+                onclick="showPage('alerts-page',document.querySelectorAll('.sb-item')[1])">View All</button>
+            </div>
+            <div style="padding:0 0 4px;" id="dash-alerts-list">
+              <div style="padding:20px;text-align:center;color:var(--text3);font-size:0.85rem;">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hospital summary table -->
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title">🏥 Hospital Bed Summary</div>
+              <button class="btn btn-outline btn-sm" onclick="loadHospitals()">↻ Refresh</button>
+            </div>
+            <div class="tbl-wrap" style="overflow-x:auto;">
+              <table class="data-table" id="dash-hospital-table">
+                <thead>
+                  <tr>
+                    <th>Hospital</th>
+                    <th>ICU</th>
+                    <th>NICU</th>
+                    <th>Women</th>
+                    <th>General</th>
+                    <th>Child</th>
+                    <th>Deluxe</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-hosp-body">
+                  <tr>
+                    <td colspan="8" style="text-align:center;padding:20px;color:var(--text3);">
+                      <div class="spinner"></div> Loading...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ALERTS ── -->
+        <div class="page" id="page-alerts-page">
+          <div class="page-title">Active Alerts</div>
+          <div class="page-sub">System-generated and manual alerts across the district.</div>
+          <div class="card" id="alerts-card">
+            <div class="card-hdr">
+              <div class="card-title">All Alerts</div>
+              <div class="card-actions">
+                <button class="btn btn-outline btn-sm" onclick="loadAlerts()">↻ Refresh</button>
+                <button class="btn btn-primary btn-sm" onclick="openCreateAlert()">+ New Alert</button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Type</th>
+                  <th>Message</th>
+                  <th>Hospital</th>
+                  <th>Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="alerts-body">
+                <tr>
+                  <td colspan="6" style="text-align:center;padding:20px;">
+                    <div class="spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── HOSPITALS ── -->
+        <div class="page" id="page-hospitals-page">
+          <div class="page-title">Hospitals</div>
+          <div class="page-sub">Manage all registered hospitals and their status.</div>
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title">All Hospitals</div>
+              <div class="card-actions">
+                <button class="btn btn-outline btn-sm" onclick="loadHospitals()">↻ Refresh</button>
+                <button class="btn btn-primary btn-sm" onclick="openHospitalModal()">+ Add Hospital</button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>District</th>
+                  <th>Contact</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="hospitals-body">
+                <tr>
+                  <td colspan="6" style="text-align:center;padding:20px;">
+                    <div class="spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── BEDS ── -->
+        <div class="page" id="page-beds-page">
+          <div class="page-title">Beds & Departments</div>
+          <div class="page-sub">Click a department to view and update individual bed statuses.</div>
+
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+            <select class="form-select" style="width:auto;" id="beds-hosp-select" onchange="loadDeptsBeds()">
+              <option value="">Select Hospital...</option>
+            </select>
+            <select class="form-select" style="width:auto;" id="beds-dept-select" onchange="loadBedGrid()">
+              <option value="">Select Department...</option>
+            </select>
+          </div>
+
+          <!-- Dept summary cards -->
+          <div
+            style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px;"
+            id="dept-cards"></div>
+
+          <!-- Bed grid -->
+          <div class="card" id="bed-grid-card" style="display:none;">
+            <div class="card-hdr">
+              <div class="card-title" id="bed-grid-title">Bed Status</div>
+              <div style="display:flex;gap:12px;font-size:0.75rem;align-items:center;">
+                <span style="display:flex;align-items:center;gap:4px;"><span
+                    style="width:10px;height:10px;border-radius:2px;background:#dcfce7;border:1px solid #86efac;display:inline-block;"></span>Available</span>
+                <span style="display:flex;align-items:center;gap:4px;"><span
+                    style="width:10px;height:10px;border-radius:2px;background:#fee2e2;border:1px solid #fca5a5;display:inline-block;"></span>Occupied</span>
+                <span style="display:flex;align-items:center;gap:4px;"><span
+                    style="width:10px;height:10px;border-radius:2px;background:#fffbeb;border:1px solid #fcd34d;display:inline-block;"></span>Maintenance</span>
+              </div>
+            </div>
+            <div style="padding:16px;">
+              <div class="beds-admin-grid" id="beds-admin-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── BLOOD BANK ── -->
+        <div class="page" id="page-blood-page">
+          <div class="page-title">Blood Bank Inventory</div>
+          <div class="page-sub">Manage blood unit counts across all blood banks in the district.</div>
+
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+            <select class="form-select" style="width:auto;" id="blood-bank-select" onchange="loadBloodInventory()">
+              <option value="">All Blood Banks</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="loadBloodInventory()">↻ Refresh</button>
+          </div>
+
+          <div class="blood-grid-admin" id="blood-admin-grid">
+            <div style="padding:20px;color:var(--text3);">
+              <div class="spinner"></div> Loading...
+            </div>
+          </div>
+        </div>
+
+        <!-- ── AMBULANCES ── -->
+        <div class="page" id="page-ambulance-page">
+          <div class="page-title">Ambulance Fleet</div>
+          <div class="page-sub">Track and update ambulance status across all units.</div>
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title">All Units</div>
+              <div class="card-actions">
+                <button class="btn btn-outline btn-sm" onclick="loadAmbulances()">↻ Refresh</button>
+                <button class="btn btn-primary btn-sm" onclick="openAmbModal()">+ Add Unit</button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Unit</th>
+                  <th>Type</th>
+                  <th>Driver</th>
+                  <th>Hospital</th>
+                  <th>Status</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="amb-body">
+                <tr>
+                  <td colspan="7" style="text-align:center;padding:20px;">
+                    <div class="spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── DISPATCH ── -->
+        <div class="page" id="page-dispatch-page">
+          <div class="page-title">Dispatch Records</div>
+          <div class="page-sub">Active and recent patient dispatch history.</div>
+
+          <div class="stat-row" style="grid-template-columns:repeat(4,1fr);">
+            <div class="stat-card blue">
+              <div class="stat-label">Active Now</div>
+              <div class="stat-num" id="disp-active">—</div>
+              <div class="stat-sub">en route / on scene</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-label">Completed Today</div>
+              <div class="stat-num" id="disp-done">—</div>
+              <div class="stat-sub">successful pickups</div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-label">Avg Response</div>
+              <div class="stat-num" id="disp-avg">—</div>
+              <div class="stat-sub">minutes to scene</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-label">P1 Calls</div>
+              <div class="stat-num" id="disp-p1">—</div>
+              <div class="stat-sub">critical today</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-hdr">
+              <div class="card-title">Recent Dispatches</div>
+              <div class="card-actions">
+                <button class="btn btn-outline btn-sm" onclick="loadDispatches()">↻ Refresh</button>
+                <button class="btn btn-success btn-sm" onclick="openNewDispatch()">⚡ New Dispatch</button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Condition</th>
+                  <th>Priority</th>
+                  <th>Ambulance</th>
+                  <th>Hospital</th>
+                  <th>Status</th>
+                  <th>Dispatched</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dispatch-body">
+                <tr>
+                  <td colspan="8" style="text-align:center;padding:20px;">
+                    <div class="spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /main -->
+  </div><!-- /app -->
+
+  <!-- ── MODALS ── -->
+
+  <!-- Bed status modal -->
+  <div class="modal-overlay hidden" id="bed-modal">
+    <div class="modal-box">
+      <div class="modal-hdr">
+        <div class="modal-title" id="bed-modal-title">Update Bed Status</div>
+        <button class="modal-close" onclick="closeModal('bed-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Bed Code</label>
+          <input class="form-input" id="bm-code" readonly style="background:var(--surface2);">
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="bm-status">
+            <option value="available">✓ Available</option>
+            <option value="occupied">✗ Occupied</option>
+            <option value="maintenance">⚙ Maintenance</option>
+            <option value="reserved">⊕ Reserved</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label class="form-label">Notes (optional)</label>
+          <input class="form-input" id="bm-notes" placeholder="e.g. post-surgery patient">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('bed-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveBedStatus()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blood update modal -->
+  <div class="modal-overlay hidden" id="blood-modal">
+    <div class="modal-box">
+      <div class="modal-hdr">
+        <div class="modal-title" id="blood-modal-title">Update Blood Units</div>
+        <button class="modal-close" onclick="closeModal('blood-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Blood Type</label><input class="form-input" id="bld-type"
+              readonly style="background:var(--surface2);"></div>
+          <div class="form-group"><label class="form-label">Current Units</label><input class="form-input"
+              id="bld-current" readonly style="background:var(--surface2);"></div>
+          <div class="form-group"><label class="form-label">New Unit Count</label><input class="form-input" id="bld-new"
+              type="number" min="0" placeholder="0"></div>
+          <div class="form-group"><label class="form-label">Reason</label>
+            <select class="form-select" id="bld-reason">
+              <option value="donation">Donation Received</option>
+              <option value="transfusion">Transfusion Used</option>
+              <option value="transfer_in">Transfer In</option>
+              <option value="transfer_out">Transfer Out</option>
+              <option value="expiry">Expiry Removed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('blood-modal')">Cancel</button>
+        <button class="btn btn-danger" onclick="saveBloodUpdate()">Update Inventory</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambulance status modal -->
+  <div class="modal-overlay hidden" id="amb-modal">
+    <div class="modal-box">
+      <div class="modal-hdr">
+        <div class="modal-title">Update Ambulance Status</div>
+        <button class="modal-close" onclick="closeModal('amb-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Unit Code</label><input class="form-input" id="am-code"
+              readonly style="background:var(--surface2);"></div>
+          <div class="form-group"><label class="form-label">Status</label>
+            <select class="form-select" id="am-status">
+              <option value="available">Available</option>
+              <option value="en_route">En Route</option>
+              <option value="on_scene">On Scene</option>
+              <option value="returning">Returning</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Driver Name</label><input class="form-input" id="am-driver"
+              placeholder="Driver name"></div>
+          <div class="form-group"><label class="form-label">Driver Phone</label><input class="form-input" id="am-phone"
+              placeholder="+91 XXXXX XXXXX"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('amb-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveAmbStatus()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast hidden" id="toast"></div>
+
+  <script>
+    // ════════════════════════════════════════════
+    // SUPABASE SETUP
+    // ════════════════════════════════════════════
+    let supabase = null;
+    let DEMO_MODE = false;
+    let currentBedId = null;
+    let currentBloodId = null;
+    let currentAmbId = null;
+
+    // ── DEMO DATA ──────────────────────────────
+    const DEMO = {
+      hospitals: [
+        { id: 'h1', name: 'Metro North Govt. Hospital', type: 'tertiary', status: 'active', districts: { name: 'Central District' } },
+        { id: 'h2', name: 'City General Hospital', type: 'secondary', status: 'active', districts: { name: 'Central District' } },
+        { id: 'h3', name: 'ESI Hospital (Central)', type: 'esi', status: 'active', districts: { name: 'Central District' } },
+        { id: 'h4', name: 'District Medical College', type: 'teaching', status: 'active', districts: { name: 'North District' } },
+      ],
+      bed_summary: [
+        { hospital_name: 'Metro North Govt. Hospital', dept_type: 'icu', available_beds: 8, total_beds: 20 },
+        { hospital_name: 'Metro North Govt. Hospital', dept_type: 'nicu', available_beds: 4, total_beds: 8 },
+        { hospital_name: 'Metro North Govt. Hospital', dept_type: 'women', available_beds: 6, total_beds: 20 },
+        { hospital_name: 'Metro North Govt. Hospital', dept_type: 'general', available_beds: 42, total_beds: 120 },
+        { hospital_name: 'Metro North Govt. Hospital', dept_type: 'child', available_beds: 12, total_beds: 30 },
+        { hospital_name: 'Metro North Govt. Hospital', dept_type: 'deluxe', available_beds: 3, total_beds: 10 },
+        { hospital_name: 'City General Hospital', dept_type: 'icu', available_beds: 1, total_beds: 12 },
+        { hospital_name: 'City General Hospital', dept_type: 'general', available_beds: 8, total_beds: 80 },
+        { hospital_name: 'ESI Hospital (Central)', dept_type: 'icu', available_beds: 5, total_beds: 10 },
+        { hospital_name: 'ESI Hospital (Central)', dept_type: 'general', available_beds: 38, total_beds: 90 },
+        { hospital_name: 'District Medical College', dept_type: 'icu', available_beds: 0, total_beds: 30 },
+        { hospital_name: 'District Medical College', dept_type: 'general', available_beds: 0, total_beds: 200 },
+      ],
+      blood: [
+        { id: 'bi1', blood_type: 'A+', units: 84, capacity: 100, level: 'ok', blood_banks: { name: 'Metro North Blood Bank' } },
+        { id: 'bi2', blood_type: 'A-', units: 12, capacity: 50, level: 'low', blood_banks: { name: 'Metro North Blood Bank' } },
+        { id: 'bi3', blood_type: 'B+', units: 96, capacity: 100, level: 'ok', blood_banks: { name: 'Metro North Blood Bank' } },
+        { id: 'bi4', blood_type: 'B-', units: 8, capacity: 50, level: 'low', blood_banks: { name: 'City General Blood Bank' } },
+        { id: 'bi5', blood_type: 'O+', units: 120, capacity: 150, level: 'ok', blood_banks: { name: 'Metro North Blood Bank' } },
+        { id: 'bi6', blood_type: 'O-', units: 2, capacity: 50, level: 'critical', blood_banks: { name: 'Metro North Blood Bank' } },
+        { id: 'bi7', blood_type: 'AB+', units: 55, capacity: 80, level: 'ok', blood_banks: { name: 'ESI Blood Bank' } },
+        { id: 'bi8', blood_type: 'AB-', units: 35, capacity: 50, level: 'ok', blood_banks: { name: 'ESI Blood Bank' } },
+      ],
+      ambulances: [
+        { id: 'a1', unit_code: 'AMB-01', type: 'cardiac', status: 'en_route', driver_name: 'Ramesh Patil', driver_phone: '9876543210', updated_at: new Date().toISOString(), hospitals: { name: 'Metro North' } },
+        { id: 'a2', unit_code: 'AMB-03', type: 'als', status: 'available', driver_name: 'Dinesh Rao', driver_phone: '9876543212', updated_at: new Date().toISOString(), hospitals: { name: 'City General' } },
+        { id: 'a3', unit_code: 'AMB-05', type: 'als', status: 'en_route', driver_name: 'Ganesh Sharma', driver_phone: '9876543214', updated_at: new Date().toISOString(), hospitals: { name: 'ESI Hospital' } },
+        { id: 'a4', unit_code: 'AMB-07', type: 'als', status: 'en_route', driver_name: 'Vijay Mehta', driver_phone: '9876543216', updated_at: new Date().toISOString(), hospitals: { name: 'District Medical' } },
+        { id: 'a5', unit_code: 'AMB-09', type: 'bls', status: 'available', driver_name: 'Sanjay Tiwari', driver_phone: '9876543218', updated_at: new Date().toISOString(), hospitals: { name: 'Apollo District' } },
+      ],
+      dispatches: [
+        { id: 'd1', status: 'en_route', dispatched_at: new Date(Date.now() - 8 * 60000).toISOString(), distance_km: 3.2, patients: { name: 'Rajesh Kumar', age: 58, condition: 'Cardiac Arrest', priority: 'P1' }, ambulances: { unit_code: 'AMB-01' }, hospitals: { name: 'Metro North' } },
+        { id: 'd2', status: 'on_scene', dispatched_at: new Date(Date.now() - 20 * 60000).toISOString(), distance_km: 2.8, patients: { name: 'Sunita Sharma', age: 34, condition: 'Respiratory Distress', priority: 'P2' }, ambulances: { unit_code: 'AMB-03' }, hospitals: { name: 'City General' } },
+        { id: 'd3', status: 'transporting', dispatched_at: new Date(Date.now() - 35 * 60000).toISOString(), distance_km: 4.1, patients: { name: 'Arjun Mehta', age: 8, condition: 'Seizure', priority: 'P1' }, ambulances: { unit_code: 'AMB-04' }, hospitals: { name: 'Metro North' } },
+        { id: 'd4', status: 'completed', dispatched_at: new Date(Date.now() - 120 * 60000).toISOString(), distance_km: 1.9, patients: { name: 'Kavita Patel', age: 29, condition: 'Labour Emergency', priority: 'P1' }, ambulances: { unit_code: 'AMB-06' }, hospitals: { name: 'ESI Hospital' } },
+        { id: 'd5', status: 'en_route', dispatched_at: new Date(Date.now() - 5 * 60000).toISOString(), distance_km: 5.5, patients: { name: 'Mohammed Khan', age: 67, condition: 'Stroke', priority: 'P1' }, ambulances: { unit_code: 'AMB-07' }, hospitals: { name: 'District Medical' } },
+      ],
+      alerts: [
+        { id: 'al1', severity: 'critical', type: 'bed_critical', message: 'City General ICU at 92% — 1 bed remaining. Recommend divert.', hospitals: { name: 'City General Hospital' }, created_at: new Date(Date.now() - 10 * 60000).toISOString(), is_resolved: false },
+        { id: 'al2', severity: 'critical', type: 'bed_critical', message: 'District Medical College at 100% capacity across all departments.', hospitals: { name: 'District Medical College' }, created_at: new Date(Date.now() - 30 * 60000).toISOString(), is_resolved: false },
+        { id: 'al3', severity: 'critical', type: 'blood_critical', message: 'O-Negative critically low — only 2 units total across district.', hospitals: null, created_at: new Date(Date.now() - 45 * 60000).toISOString(), is_resolved: false },
+        { id: 'al4', severity: 'warning', type: 'blood_critical', message: 'A-Negative at Metro North below 20% — 6 units remaining.', hospitals: { name: 'Metro North Govt. Hospital' }, created_at: new Date(Date.now() - 60 * 60000).toISOString(), is_resolved: false },
+        { id: 'al5', severity: 'warning', type: 'ambulance_delay', message: 'AMB-07 ETA exceeded by 6 minutes — heavy traffic on NH-48.', hospitals: null, created_at: new Date(Date.now() - 15 * 60000).toISOString(), is_resolved: false },
+      ]
+    };
+
+    // ════════════════════════════════════════════
+    // CONNECT / DEMO
+    // ════════════════════════════════════════════
+    async function connectSupabase() {
+      const url = document.getElementById('sb-url').value.trim();
+      const key = document.getElementById('sb-key').value.trim();
+      const errEl = document.getElementById('cfg-error');
+      const btn = document.getElementById('connect-label');
+
+      if (!url || !key) { showCfgError('Please enter both the URL and anon key.'); return; }
+
+      btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-color:#fff;border-top-color:transparent;display:inline-block;margin-right:8px;"></div>Connecting...';
+
+      try {
+        supabase = window.supabase.createClient(url, key);
+        const { data, error } = await supabase.from('hospitals').select('id').limit(1);
+        if (error) throw error;
+        errEl.style.display = 'none';
+        enterApp(false);
+      } catch (e) {
+        showCfgError('Connection failed: ' + e.message + '. Check your URL/key and that schema.sql has been run.');
+        btn.textContent = 'Connect & Enter Admin Panel';
+      }
+    }
+
+    function loadDemo() {
+      DEMO_MODE = true;
+      enterApp(true);
+    }
+
+    function enterApp(demo) {
+      document.getElementById('cfg-modal').classList.add('hidden');
+      document.getElementById('app').classList.add('show');
+      document.getElementById('sb-user-name').textContent = demo ? 'Demo Admin' : 'Hospital Admin';
+      document.getElementById('sb-user-role').textContent = demo ? 'DEMO MODE' : 'SUPER ADMIN';
+      loadDashboard();
+      startRealtime();
+    }
+
+    function showCfgError(msg) {
+      const el = document.getElementById('cfg-error');
+      el.textContent = '⚠ ' + msg;
+      el.style.display = 'flex';
+      document.getElementById('connect-label').textContent = 'Connect & Enter Admin Panel';
+    }
+
+    function signOut() {
+      document.getElementById('app').classList.remove('show');
+      document.getElementById('cfg-modal').classList.remove('hidden');
+      supabase = null; DEMO_MODE = false;
+    }
+
+    // ════════════════════════════════════════════
+    // CLOCK
+    // ════════════════════════════════════════════
+    setInterval(() => {
+      const el = document.getElementById('admin-clock');
+      if (el) el.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
+    }, 1000);
+
+    // ════════════════════════════════════════════
+    // NAVIGATION
+    // ════════════════════════════════════════════
+    const PAGE_TITLES = {
+      'dashboard': 'Dashboard', 'alerts-page': 'Alerts', 'hospitals-page': 'Hospitals',
+      'beds-page': 'Beds & Departments', 'blood-page': 'Blood Bank',
+      'ambulance-page': 'Ambulances', 'dispatch-page': 'Dispatch Records'
+    };
+    const PAGE_LOADERS = {
+      'dashboard': loadDashboard, 'alerts-page': loadAlerts, 'hospitals-page': loadHospitals,
+      'beds-page': loadBedsPage, 'blood-page': loadBloodInventory,
+      'ambulance-page': loadAmbulances, 'dispatch-page': loadDispatches
+    };
+
+    function showPage(id, tabEl) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sb-item').forEach(t => t.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      if (tabEl) tabEl.classList.add('active');
+      document.getElementById('topbar-title').textContent = PAGE_TITLES[id] || id;
+      if (PAGE_LOADERS[id]) PAGE_LOADERS[id]();
+    }
+
+    // ════════════════════════════════════════════
+    // HELPERS
+    // ════════════════════════════════════════════
+    function fmt(dt) { if (!dt) return '—'; return new Date(dt).toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' }) + ' ' + new Date(dt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }); }
+    function timeAgo(dt) { if (!dt) return '—'; const s = Math.floor((Date.now() - new Date(dt)) / 1000); if (s < 60) return s + 's ago'; if (s < 3600) return Math.floor(s / 60) + 'm ago'; return Math.floor(s / 3600) + 'h ago'; }
+    function progColor(a, t) { if (!t) return '#94a3b8'; const p = a / t; if (p < 0.1) return '#dc2626'; if (p < 0.25) return '#d97706'; return '#16a34a'; }
+
+    function progCell(a, t) {
+      if (!t) return '<span style="color:var(--text3);font-size:0.75rem;">—</span>';
+      const col = progColor(a, t); const pct = t > 0 ? Math.round(((t - a) / t) * 100) : 100;
+      return `<div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${col};"></div></div>
+    <span class="prog-label" style="color:${col}">${a}<span style="color:var(--text3);font-weight:400">/${t}</span></span>
+  </div>`;
+    }
+
+    function dispStatusBadge(s) {
+      const m = { dispatched: 'badge-blue', en_route: 'badge-amber', on_scene: 'badge-amber', transporting: 'badge-purple', completed: 'badge-green', cancelled: 'badge' };
+      const l = { dispatched: 'Dispatched', en_route: 'En Route', on_scene: 'On Scene', transporting: 'Transporting', completed: 'Completed', cancelled: 'Cancelled' };
+      return `<span class="badge ${m[s] || 'badge'}">${l[s] || s}</span>`;
+    }
+
+    function ambStatusBadge(s) {
+      const m = { available: 'badge-green', en_route: 'badge-amber', on_scene: 'badge-purple', returning: 'badge-blue', maintenance: 'badge' };
+      const l = { available: 'Available', en_route: 'En Route', on_scene: 'On Scene', returning: 'Returning', maintenance: 'Maintenance' };
+      return `<span class="badge ${m[s] || 'badge'}">${l[s] || s}</span>`;
+    }
+
+    function severityBadge(s) {
+      if (s === 'critical') return `<span class="badge badge-red">● CRITICAL</span>`;
+      if (s === 'warning') return `<span class="badge badge-amber">▲ WARNING</span>`;
+      return `<span class="badge badge-blue">ℹ INFO</span>`;
+    }
+
+    async function dbGet(table, query) {
+      if (DEMO_MODE) return { data: DEMO[table] || [], error: null };
+      return await query;
+    }
+
+    function toast(msg, type = 'success') {
+      const el = document.getElementById('toast');
+      el.textContent = (type === 'success' ? '✓ ' : type === 'error' ? '✕ ' : 'ℹ ') + msg;
+      el.style.borderLeft = `4px solid ${type === 'success' ? '#16a34a' : type === 'error' ? '#dc2626' : '#2563eb'}`;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 3500);
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // ════════════════════════════════════════════
+    // DASHBOARD
+    // ════════════════════════════════════════════
+    async function loadDashboard() {
+      // Summary stats
+      if (DEMO_MODE) {
+        const avail = DEMO.bed_summary.reduce((s, r) => s + r.available_beds, 0);
+        document.getElementById('ds-avail').textContent = avail;
+        document.getElementById('ds-crit').textContent = DEMO.alerts.filter(a => a.type === 'bed_critical').length;
+        document.getElementById('ds-disp').textContent = DEMO.dispatches.filter(d => ['en_route', 'on_scene', 'transporting'].includes(d.status)).length;
+        document.getElementById('ds-blood').textContent = DEMO.blood.filter(b => b.level !== 'ok').length;
+      } else if (supabase) {
+        const { data } = await supabase.from('v_hospital_bed_summary').select('available_beds');
+        if (data) document.getElementById('ds-avail').textContent = data.reduce((s, r) => s + (r.available_beds || 0), 0);
+        const { data: al } = await supabase.from('alerts').select('id').eq('is_resolved', false);
+        if (al) document.getElementById('ds-crit').textContent = al.length;
+        const { data: dp } = await supabase.from('dispatch_records').select('id').in('status', ['en_route', 'on_scene', 'transporting']);
+        if (dp) document.getElementById('ds-disp').textContent = dp.length;
+        const { data: bl } = await supabase.from('v_blood_summary').select('level').neq('level', 'ok');
+        if (bl) document.getElementById('ds-blood').textContent = bl.length;
+      }
+
+      loadDashAlerts();
+      loadDashHospTable();
+    }
+
+    async function loadDashAlerts() {
+      const alerts = DEMO_MODE ? DEMO.alerts.slice(0, 3) : (await supabase.from('alerts').select('*,hospitals(name)').eq('is_resolved', false).order('created_at', { ascending: false }).limit(3)).data || [];
+      const el = document.getElementById('dash-alerts-list');
+      if (!alerts.length) { el.innerHTML = '<div style="padding:16px 20px;color:var(--text3);font-size:0.85rem;">No active alerts.</div>'; return; }
+      el.innerHTML = alerts.map(a => `
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);">
+      ${severityBadge(a.severity)}
+      <div style="flex:1;">
+        <div style="font-size:0.85rem;font-weight:600;">${a.message}</div>
+        <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">${a.hospitals?.name || 'District-wide'} · ${timeAgo(a.created_at)}</div>
+      </div>
+    </div>`).join('');
+    }
+
+    async function loadDashHospTable() {
+      const tbody = document.getElementById('dash-hosp-body');
+      let rows = DEMO_MODE ? DEMO.bed_summary : (await supabase.from('v_hospital_bed_summary').select('*').order('hospital_name')).data || [];
+      // Group by hospital
+      const grouped = {};
+      rows.forEach(r => {
+        if (!grouped[r.hospital_name]) grouped[r.hospital_name] = { name: r.hospital_name, depts: {} };
+        grouped[r.hospital_name].depts[r.dept_type] = r;
+      });
+      const types = ['icu', 'nicu', 'women', 'general', 'child', 'deluxe'];
+      tbody.innerHTML = Object.values(grouped).map(h => {
+        const allAvail = types.reduce((s, t) => s + (h.depts[t]?.available_beds || 0), 0);
+        const allTotal = types.reduce((s, t) => s + (h.depts[t]?.total_beds || 0), 0);
+        const pct = allTotal > 0 ? (allTotal - allAvail) / allTotal * 100 : 100;
+        const status = pct >= 100 ? `<span class="badge badge-red">FULL</span>` : pct >= 80 ? `<span class="badge badge-amber">LIMITED</span>` : `<span class="badge badge-green">OPEN</span>`;
+        return `<tr>
+      <td style="font-weight:600;">${h.name}</td>
+      ${types.map(t => `<td>${progCell(h.depts[t]?.available_beds || 0, h.depts[t]?.total_beds || 0)}</td>`).join('')}
+      <td>${status}</td>
+    </tr>`;
+      }).join('') || '<tr><td colspan="8" style="text-align:center;padding:16px;color:var(--text3);">No data available.</td></tr>';
+    }
+
+    // ════════════════════════════════════════════
+    // ALERTS
+    // ════════════════════════════════════════════
+    async function loadAlerts() {
+      const tbody = document.getElementById('alerts-body');
+      const data = DEMO_MODE ? DEMO.alerts : (await supabase.from('alerts').select('*,hospitals(name)').order('created_at', { ascending: false })).data || [];
+      document.getElementById('sb-alert-count').textContent = data.filter(a => !a.is_resolved).length;
+      tbody.innerHTML = data.map(a => `
+    <tr>
+      <td>${severityBadge(a.severity)}</td>
+      <td><span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text2);">${a.type}</span></td>
+      <td style="font-size:0.85rem;max-width:320px;">${a.message}</td>
+      <td style="font-size:0.82rem;">${a.hospitals?.name || '<span style="color:var(--text3)">District-wide</span>'}</td>
+      <td style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text3);">${timeAgo(a.created_at)}</td>
+      <td>${a.is_resolved ? `<span class="badge badge-green">Resolved</span>` : `<button class="btn btn-outline btn-sm" onclick="resolveAlert('${a.id}')">Resolve</button>`}</td>
+    </tr>`).join('');
+    }
+
+    async function resolveAlert(id) {
+      if (DEMO_MODE) { const a = DEMO.alerts.find(x => x.id === id); if (a) a.is_resolved = true; loadAlerts(); toast('Alert resolved'); return; }
+      await supabase.from('alerts').update({ is_resolved: true, resolved_at: new Date().toISOString() }).eq('id', id);
+      loadAlerts(); toast('Alert marked as resolved');
+    }
+
+    function openCreateAlert() {
+      const msg = prompt('Alert message:');
+      if (!msg) return;
+      if (DEMO_MODE) { DEMO.alerts.unshift({ id: 'new' + Date.now(), severity: 'warning', type: 'manual', message: msg, hospitals: null, created_at: new Date().toISOString(), is_resolved: false }); loadAlerts(); toast('Alert created'); return; }
+      supabase.from('alerts').insert({ type: 'system', severity: 'warning', message: msg }).then(() => { loadAlerts(); toast('Alert created'); });
+    }
+
+    // ════════════════════════════════════════════
+    // HOSPITALS
+    // ════════════════════════════════════════════
+    async function loadHospitals() {
+      const tbody = document.getElementById('hospitals-body');
+      const data = DEMO_MODE ? DEMO.hospitals : (await supabase.from('hospitals').select('*,districts(name)').order('name')).data || [];
+      tbody.innerHTML = data.map(h => `
+    <tr>
+      <td><div style="font-weight:600;">${h.name}</div></td>
+      <td><span class="badge badge-blue" style="text-transform:capitalize;">${h.type}</span></td>
+      <td style="font-size:0.82rem;color:var(--text2);">${h.districts?.name || '—'}</td>
+      <td style="font-family:var(--font-mono);font-size:0.72rem;">${h.phone || '—'}</td>
+      <td><span class="badge ${h.status === 'active' ? 'badge-green' : 'badge'}" style="text-transform:capitalize;">${h.status}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="editHospStatus('${h.id}','${h.name}','${h.status}')">Edit</button>
+        </div>
+      </td>
+    </tr>`).join('');
+
+      // Populate hospital selects
+      const selects = ['beds-hosp-select'];
+      selects.forEach(sid => {
+        const sel = document.getElementById(sid);
+        if (sel) { sel.innerHTML = '<option value="">Select Hospital...</option>' + data.map(h => `<option value="${h.id}">${h.name}</option>`).join(''); }
+      });
+    }
+
+    async function editHospStatus(id, name, currentStatus) {
+      const newStatus = prompt(`Update status for ${name}:\nCurrent: ${currentStatus}\n\nEnter: active / inactive / emergency_only`, currentStatus);
+      if (!newStatus || newStatus === currentStatus) return;
+      if (DEMO_MODE) { const h = DEMO.hospitals.find(x => x.id === id); if (h) h.status = newStatus; loadHospitals(); toast('Hospital status updated'); return; }
+      await supabase.from('hospitals').update({ status: newStatus }).eq('id', id);
+      loadHospitals(); toast('Hospital status updated');
+    }
+
+    function openHospitalModal() { alert('Add Hospital form\n[In production: opens full form to add hospital with all details, district assignment, GPS coordinates, and department setup]'); }
+
+    // ════════════════════════════════════════════
+    // BEDS PAGE
+    // ════════════════════════════════════════════
+    function loadBedsPage() { loadHospitals(); }
+
+    async function loadDeptsBeds() {
+      const hospId = document.getElementById('beds-hosp-select').value;
+      const deptSel = document.getElementById('beds-dept-select');
+      deptSel.innerHTML = '<option value="">Select Department...</option>';
+      document.getElementById('dept-cards').innerHTML = '';
+      document.getElementById('bed-grid-card').style.display = 'none';
+      if (!hospId) return;
+
+      let depts;
+      if (DEMO_MODE) {
+        const deptTypes = ['icu', 'nicu', 'women', 'general', 'child', 'deluxe'];
+        depts = deptTypes.map((t, i) => ({ id: 'd' + i + '_' + hospId, type: t, name: t.toUpperCase() + ' Department', total_beds: [20, 8, 20, 120, 30, 10][i] }));
+      } else {
+        const { data } = await supabase.from('departments').select('*').eq('hospital_id', hospId).eq('is_active', true);
+        depts = data || [];
+      }
+
+      const icons = { icu: '🫀', nicu: '👶', women: '🤰', general: '🛏', child: '🧒', deluxe: '⭐' };
+      const colors = { icu: 'var(--red)', nicu: '#ec4899', women: 'var(--purple)', general: 'var(--blue)', child: 'var(--teal)', deluxe: 'var(--amber)' };
+
+      deptSel.innerHTML = '<option value="">Select Department...</option>' + depts.map(d => `<option value="${d.id}" data-type="${d.type}">${icons[d.type] || ''} ${d.name}</option>`).join('');
+
+      // Dept summary cards
+      document.getElementById('dept-cards').innerHTML = depts.map(d => {
+        const avail = DEMO_MODE ? Math.floor(Math.random() * d.total_beds) : 0;
+        const col = colors[d.type] || 'var(--blue)';
+        const pct = d.total_beds > 0 ? Math.round(((d.total_beds - avail) / d.total_beds) * 100) : 0;
+        return `<div style="background:#fff;border:1.5px solid var(--border);border-top:3px solid ${col};border-radius:8px;padding:14px;cursor:pointer;" onclick="selectDept('${d.id}','${d.type}')">
+      <div style="font-size:1.3rem;margin-bottom:6px;">${icons[d.type] || '🛏'}</div>
+      <div style="font-weight:700;font-size:0.9rem;text-transform:uppercase;">${d.type}</div>
+      <div style="font-family:var(--font-mono);font-size:1.4rem;font-weight:700;color:${col};margin:4px 0;">${d.total_beds}</div>
+      <div style="font-size:0.7rem;color:var(--text3);">total beds · click to view</div>
+    </div>`;
+      }).join('');
+    }
+
+    function selectDept(id, type) {
+      document.getElementById('beds-dept-select').value = id;
+      loadBedGrid();
+    }
+
+    async function loadBedGrid() {
+      const deptId = document.getElementById('beds-dept-select').value;
+      if (!deptId) { document.getElementById('bed-grid-card').style.display = 'none'; return; }
+
+      const deptOpt = document.querySelector(`#beds-dept-select option[value="${deptId}"]`);
+      const deptType = deptOpt?.dataset?.type || 'dept';
+      document.getElementById('bed-grid-title').textContent = `🛏 ${deptType.toUpperCase()} — Bed Status`;
+      document.getElementById('bed-grid-card').style.display = 'block';
+
+      let beds;
+      if (DEMO_MODE) {
+        const icons2 = { icu: 'ICU', nicu: 'NICU', women: 'W', general: 'GEN', child: 'C', deluxe: 'DLX' };
+        const prefix = icons2[deptType] || 'B';
+        const total = [20, 8, 20, 120, 30, 10][['icu', 'nicu', 'women', 'general', 'child', 'deluxe'].indexOf(deptType)] || 10;
+        const avail = Math.floor(total * 0.4);
+        beds = Array.from({ length: total }, (_, i) => ({ id: 'b' + i, bed_code: `${prefix}-${String(i + 1).padStart(2, '0')}`, status: i < avail ? 'available' : i === avail ? 'maintenance' : 'occupied', notes: '' }));
+      } else {
+        const { data } = await supabase.from('beds').select('*').eq('department_id', deptId).order('bed_code');
+        beds = data || [];
+      }
+
+      document.getElementById('beds-admin-grid').innerHTML = beds.map(b => `
+    <div class="bed-admin ${b.status}" onclick="openBedModal('${b.id}','${b.bed_code}','${b.status}','${b.notes || ''}')">
+      <div class="ba-code">${b.bed_code}</div>
+      <div class="ba-status">${b.status === 'available' ? '✓ Free' : b.status === 'occupied' ? '✗ Occupied' : b.status === 'maintenance' ? '⚙ Maint.' : '⊕ Reserved'}</div>
+    </div>`).join('');
+    }
+
+    function openBedModal(id, code, status, notes) {
+      currentBedId = id;
+      document.getElementById('bm-code').value = code;
+      document.getElementById('bm-status').value = status;
+      document.getElementById('bm-notes').value = notes;
+      document.getElementById('bed-modal').classList.remove('hidden');
+    }
+
+    async function saveBedStatus() {
+      const status = document.getElementById('bm-status').value;
+      const notes = document.getElementById('bm-notes').value;
+      if (DEMO_MODE) { toast('Bed status updated to: ' + status); closeModal('bed-modal'); loadBedGrid(); return; }
+      const { error } = await supabase.from('beds').update({ status, notes, last_updated: new Date().toISOString() }).eq('id', currentBedId);
+      if (error) { toast('Error: ' + error.message, 'error'); return; }
+      toast('Bed status updated'); closeModal('bed-modal'); loadBedGrid();
+    }
+
+    // ════════════════════════════════════════════
+    // BLOOD BANK
+    // ════════════════════════════════════════════
+    async function loadBloodInventory() {
+      const grid = document.getElementById('blood-admin-grid');
+      let data;
+      if (DEMO_MODE) { data = DEMO.blood; }
+      else {
+        const bankId = document.getElementById('blood-bank-select').value;
+        let q = supabase.from('blood_inventory').select('*,blood_banks(name)').order('blood_type');
+        if (bankId) q = q.eq('blood_bank_id', bankId);
+        const res = await q; data = res.data || [];
+      }
+
+      // Load bank options
+      if (!DEMO_MODE && supabase) {
+        const { data: banks } = await supabase.from('blood_banks').select('id,name');
+        const sel = document.getElementById('blood-bank-select');
+        if (banks && sel) sel.innerHTML = '<option value="">All Blood Banks</option>' + banks.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+      }
+
+      grid.innerHTML = data.map(b => {
+        const pct = Math.round((b.units / b.capacity) * 100);
+        const col = b.level === 'ok' || pct >= 20 ? 'var(--green)' : pct >= 10 ? 'var(--amber)' : 'var(--red)';
+        const tagCls = pct <= 0 ? 'badge-red' : pct < 20 ? 'badge-amber' : 'badge-green';
+        const tagTxt = pct <= 0 ? 'CRITICAL' : pct < 20 ? 'LOW' : 'ADEQUATE';
+        return `<div class="blood-card-admin" onclick="openBloodModal('${b.id}','${b.blood_type}','${b.units}','${b.capacity}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div class="bca-type" style="color:${col}">${b.blood_type}</div>
+        <span class="badge ${tagCls}">${tagTxt}</span>
+      </div>
+      <div class="bca-units">${b.units} / ${b.capacity} units · ${b.blood_banks?.name || '—'}</div>
+      <div class="bca-bar"><div class="bca-fill" style="width:${pct}%;background:${col};"></div></div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.65rem;color:var(--text3);margin-top:4px;">
+        <span>0</span><span>${pct}%</span><span>${b.capacity}u</span>
+      </div>
+      <button class="btn btn-outline btn-sm" style="width:100%;margin-top:8px;" onclick="event.stopPropagation();openBloodModal('${b.id}','${b.blood_type}','${b.units}','${b.capacity}')">Update Units</button>
+    </div>`;
+      }).join('');
+    }
+
+    function openBloodModal(id, type, current, cap) {
+      currentBloodId = id;
+      document.getElementById('blood-modal-title').textContent = `Update ${type} Blood Units`;
+      document.getElementById('bld-type').value = type;
+      document.getElementById('bld-current').value = current + ' / ' + cap + ' units';
+      document.getElementById('bld-new').value = current;
+      document.getElementById('blood-modal').classList.remove('hidden');
+    }
+
+    async function saveBloodUpdate() {
+      const newUnits = parseInt(document.getElementById('bld-new').value);
+      const reason = document.getElementById('bld-reason').value;
+      if (isNaN(newUnits) || newUnits < 0) { toast('Enter a valid number', 'error'); return; }
+      if (DEMO_MODE) {
+        const b = DEMO.blood.find(x => x.id === currentBloodId);
+        if (b) { b.units = newUnits; b.level = newUnits === 0 ? 'critical' : newUnits / b.capacity < 0.2 ? 'low' : 'ok'; }
+        toast('Blood inventory updated'); closeModal('blood-modal'); loadBloodInventory(); return;
+      }
+      const { error } = await supabase.from('blood_inventory').update({ units: newUnits, last_updated: new Date().toISOString() }).eq('id', currentBloodId);
+      if (error) { toast('Error: ' + error.message, 'error'); return; }
+      toast('Inventory updated'); closeModal('blood-modal'); loadBloodInventory();
+    }
+
+    // ════════════════════════════════════════════
+    // AMBULANCES
+    // ════════════════════════════════════════════
+    async function loadAmbulances() {
+      const tbody = document.getElementById('amb-body');
+      const data = DEMO_MODE ? DEMO.ambulances : (await supabase.from('ambulances').select('*,hospitals(name)').order('unit_code')).data || [];
+      tbody.innerHTML = data.map(a => `
+    <tr>
+      <td style="font-family:var(--font-mono);font-weight:700;">${a.unit_code}</td>
+      <td><span class="badge badge-blue" style="text-transform:uppercase;">${a.type}</span></td>
+      <td>
+        <div style="font-size:0.85rem;font-weight:600;">${a.driver_name || '—'}</div>
+        <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text3);">${a.driver_phone || ''}</div>
+      </td>
+      <td style="font-size:0.82rem;">${a.hospitals?.name || '—'}</td>
+      <td>${ambStatusBadge(a.status)}</td>
+      <td style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text3);">${timeAgo(a.updated_at)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="openAmbEdit('${a.id}','${a.unit_code}','${a.status}','${a.driver_name || ''}','${a.driver_phone || ''}')">Update</button></td>
+    </tr>`).join('');
+    }
+
+    function openAmbEdit(id, code, status, driver, phone) {
+      currentAmbId = id;
+      document.getElementById('am-code').value = code;
+      document.getElementById('am-status').value = status;
+      document.getElementById('am-driver').value = driver;
+      document.getElementById('am-phone').value = phone;
+      document.getElementById('amb-modal').classList.remove('hidden');
+    }
+
+    async function saveAmbStatus() {
+      const status = document.getElementById('am-status').value;
+      const driver = document.getElementById('am-driver').value;
+      const phone = document.getElementById('am-phone').value;
+      if (DEMO_MODE) { const a = DEMO.ambulances.find(x => x.id === currentAmbId); if (a) { a.status = status; a.driver_name = driver; a.driver_phone = phone; a.updated_at = new Date().toISOString(); } toast('Ambulance updated'); closeModal('amb-modal'); loadAmbulances(); return; }
+      const { error } = await supabase.from('ambulances').update({ status, driver_name: driver, driver_phone: phone, updated_at: new Date().toISOString() }).eq('id', currentAmbId);
+      if (error) { toast('Error: ' + error.message, 'error'); return; }
+      toast('Ambulance status updated'); closeModal('amb-modal'); loadAmbulances();
+    }
+
+    function openAmbModal() { alert('Add Ambulance form\n[In production: opens form to register new ambulance unit with hospital assignment, vehicle reg, and driver details]'); }
+
+    // ════════════════════════════════════════════
+    // DISPATCH
+    // ════════════════════════════════════════════
+    async function loadDispatches() {
+      const data = DEMO_MODE ? DEMO.dispatches : (await supabase.from('v_active_dispatches').select('*').limit(50)).data || [];
+      const tbody = document.getElementById('dispatch-body');
+
+      const active = data.filter(d => ['en_route', 'on_scene', 'transporting', 'dispatched'].includes(d.status)).length;
+      const done = data.filter(d => d.status === 'completed').length;
+      const p1 = data.filter(d => d.patients?.priority === 'P1' || d.priority === 'P1').length;
+      document.getElementById('disp-active').textContent = active;
+      document.getElementById('disp-done').textContent = done;
+      document.getElementById('disp-avg').textContent = '7.4';
+      document.getElementById('disp-p1').textContent = p1;
+
+      tbody.innerHTML = data.map(d => {
+        const pat = d.patients || {};
+        const amb = d.ambulances || {};
+        const hosp = d.hospitals || {};
+        const priClass = pat.priority === 'P1' ? 'badge-red' : pat.priority === 'P2' ? 'badge-amber' : 'badge-blue';
+        return `<tr>
+      <td><div style="font-weight:600;font-size:0.85rem;">${pat.name || 'Unknown'}</div><div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text3);">${pat.age || '?'} yrs</div></td>
+      <td style="font-size:0.82rem;">${pat.condition || '—'}</td>
+      <td><span class="badge ${priClass}">${pat.priority || '—'}</span></td>
+      <td style="font-family:var(--font-mono);font-size:0.78rem;font-weight:700;">${amb.unit_code || d.ambulance_unit || '—'}</td>
+      <td style="font-size:0.82rem;">${hosp.name || d.destination_hospital || '—'}</td>
+      <td>${dispStatusBadge(d.status)}</td>
+      <td style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text3);">${timeAgo(d.dispatched_at)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="viewDispatch('${d.id}')">View</button></td>
+    </tr>`;
+      }).join('');
+    }
+
+    function viewDispatch(id) {
+      const d = DEMO.dispatches.find(x => x.id === id) || { id, status: 'en_route' };
+      const pat = d.patients || {};
+      alert(`📡 Dispatch Record: ${id}\n\nPatient: ${pat.name || '—'} · ${pat.age || '?'} yrs\nCondition: ${pat.condition || '—'}\nPriority: ${pat.priority || '—'}\nStatus: ${d.status}\nAmbulance: ${d.ambulances?.unit_code || '—'}\nHospital: ${d.hospitals?.name || '—'}\nDistance: ${d.distance_km || '—'} km\n\n[In production: opens full timeline, GPS trail map, and real-time status update panel]`);
+    }
+
+    function openNewDispatch() { alert('New Dispatch Panel\n[In production: opens form to:\n1. Enter patient details\n2. Auto-find nearest available ambulance\n3. Auto-find nearest hospital with matching bed type\n4. One-click dispatch with SMS/push alert to driver]'); }
+
+    // ════════════════════════════════════════════
+    // REALTIME (Supabase subscriptions)
+    // ════════════════════════════════════════════
+    function startRealtime() {
+      if (!supabase || DEMO_MODE) return;
+      // Subscribe to beds changes
+      supabase.channel('beds-changes')
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'beds' }, () => {
+          loadBedGrid(); loadDashboard();
+        }).subscribe();
+      // Subscribe to blood inventory
+      supabase.channel('blood-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'blood_inventory' }, () => {
+          loadBloodInventory(); loadDashboard();
+        }).subscribe();
+      // Subscribe to alerts
+      supabase.channel('alerts-changes')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'alerts' }, (payload) => {
+          toast('🚨 New Alert: ' + payload.new.message, 'error');
+          loadAlerts(); loadDashboard();
+        }).subscribe();
+      // Subscribe to dispatch
+      supabase.channel('dispatch-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'dispatch_records' }, () => {
+          loadDispatches(); loadDashboard();
+        }).subscribe();
+    }
+  </script>
+</body>
+
+</html>

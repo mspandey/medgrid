@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>MediGrid — Staff Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── THEME TOKENS (RED & WHITE) ── */
+    :root {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --primary: #D80032;
+      /* Deep Red */
+      --primary-light: #fff0f3;
+      --text: #2B2D42;
+      --text-dim: #8D99AE;
+
+      --success: #0ca678;
+      --success-bg: #e6fcf5;
+      --warning: #f59f00;
+      --warning-bg: #fff9db;
+      --danger: #D80032;
+      --danger-bg: #fff0f3;
+      --info: #0077ff;
+      --info-bg: #e7f5ff;
+
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    /* ── UTILS ── */
+    .hide {
+      display: none !important
+    }
+
+    .flex {
+      display: flex;
+      align-items: center
+    }
+
+    .gap {
+      gap: 10px
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes up {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(216, 0, 50, 0.4)
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px transparent
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 transparent
+      }
+    }
+
+    /* ── APP SHELL ── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      height: 70px;
+      gap: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+    }
+
+    .nav-hex {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: 6px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .nav-role {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-left: 20px;
+      flex: 1;
+      overflow-x: auto;
+    }
+
+    .nav-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover {
+      color: var(--primary);
+      background: var(--bg);
+    }
+
+    .nav-tab.on {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-left: auto;
+    }
+
+    .clock {
+      font-weight: 600;
+      color: var(--text-dim);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sos-btn {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* CONTENT */
+    .content {
+      flex: 1;
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .panel-hdr {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── UI COMPONENTS ── */
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .b-success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .b-warn {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .b-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .prog {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .prog-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--bg);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .prog-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s;
+      background: var(--info);
+    }
+
+    .prog-num {
+      font-size: 0.85rem;
+      font-weight: 700;
+      min-width: 30px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* DEPARTMENTS */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .dept-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .dept-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+
+    .dept-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .dept-icon {
+      font-size: 1.6rem;
+      color: var(--primary);
+      background: var(--primary-light);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .dept-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .dept-stat {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .dept-label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* BEDS */
+    .bed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .bed {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 8px;
+      background: var(--bg);
+      transition: 0.2s;
+    }
+
+    .bed:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow);
+    }
+
+    .bed.avail {
+      background: var(--success-bg);
+      border-color: transparent;
+      color: var(--success);
+    }
+
+    .bed.occup {
+      background: white;
+      border-color: var(--border);
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    .bed.maint {
+      background: var(--warning-bg);
+      border-color: transparent;
+      color: var(--warning);
+    }
+
+    .bed-code {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .bed-st {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* BLOOD */
+    .blood-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .b-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .b-card:hover {
+      border-color: var(--primary);
+    }
+
+    .b-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .b-type {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .b-btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .b-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* INCOMING */
+    .inc-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--danger);
+      background: var(--danger-bg);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      animation: up 0.3s ease;
+    }
+
+    .inc-dist {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--danger);
+    }
+
+    .inc-info {
+      flex: 1;
+    }
+
+    .inc-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .inc-cond {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--danger);
+      text-transform: uppercase;
+    }
+
+    /* TOAST & ALARM */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #fff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid var(--success);
+      font-weight: 600;
+      display: none;
+      animation: up 0.3s;
+      z-index: 9000;
+    }
+
+    .alarm {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 100%;
+      background: var(--danger);
+      color: white;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 900;
+      display: none;
+      font-weight: 600;
+    }
+
+    .alarm.show {
+      display: flex;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">
+        <div class="nav-hex">M</div>MediGrid
+      </div>
+      <div class="nav-role">Staff Portal</div>
+
+      <div class="nav-tabs" id="nav-tabs"></div>
+
+      <div class="nav-right">
+        <div class="clock" id="clock">--:--:--</div>
+        <a href="index.html" class="nav-tab">Exit</a>
+        <button class="sos-btn" onclick="toast('EMERGENCY CODE TRIGGERED','var(--danger)')">SOS Code</button>
+      </div>
+    </nav>
+
+    <!-- ALARM BAR -->
+    <div class="alarm" id="alarm">
+      <span style="font-size:1.2rem">🚨</span>
+      <span id="alarm-text" style="flex:1">AMBULANCE INBOUND</span>
+      <button onclick="document.getElementById('alarm').classList.remove('show')"
+        style="border:1px solid rgba(255,255,255,0.4); background:transparent; color:white; padding:4px 12px; border-radius:4px; font-weight:600; cursor:pointer;">DISMISS</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="content"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script type="module">
+    // ── DATA ──
+    import { auth, db, doc, getDoc, updateDoc, onSnapshot, onAuthStateChanged, signOut } from './firebase_config.js';
+
+    let HOSPITAL_ID = null;
+    let HOSPITAL_DATA = null;
+
+    // Dummy data structures for initial render or fallback
+    const DEPTS = [
+      { k: 'icu', i: '🫀', n: 'ICU', c: 'var(--danger)' },
+      { k: 'nicu', i: '👶', n: 'NICU', c: 'var(--info)' },
+      { k: 'women', i: '🤰', n: 'Maternity', c: 'var(--warning)' },
+      { k: 'general', i: '🛏', n: 'General', c: 'var(--success)' },
+      { k: 'child', i: '🧸', n: 'Pediatrics', c: 'var(--info)' }
+    ];
+
+    // ── STATE ──
+    let BC; try { BC = new BroadcastChannel('medigrid') } catch (e) { }
+
+    // ── UTILS ──
+    const $ = id => document.getElementById(id);
+    function toast(msg, col = 'var(--success)') {
+      const t = $('toast'); t.textContent = msg; t.style.borderLeftColor = col;
+      t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3500);
+    }
+    setInterval(() => { const c = $('clock'); if (c) c.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false }) }, 1000);
+
+    // ── AUTH & INIT ──
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        HOSPITAL_ID = user.uid;
+        initRealtimeSync();
+      } else {
+        // Fallback for Demo Mode (localstorage bypass)
+        if (localStorage.getItem('medgrid_role') === 'hospital') {
+          HOSPITAL_ID = 'demo_hospital';
+          // Create dummy data in memory if needed, or just warn
+          toast("Demo Mode: Changes won't persist to cloud", 'var(--warning)');
+          HOSPITAL_DATA = {
+            name: "Demo Hospital",
+            departments: { icu: { avail: 5, total: 10 }, general: { avail: 20, total: 50 }, nicu: { avail: 2, total: 5 }, women: { avail: 5, total: 15 }, child: { avail: 5, total: 15 } },
+            blood: { 'A+': 10, 'O-': 2, 'B+': 5 }
+          };
+          renderAll();
+        } else {
+          window.location.href = 'login.html';
+        }
+      }
+    });
+
+    window.handleLogout = () => {
+      signOut(auth).then(() => {
+        localStorage.removeItem('medgrid_role');
+        window.location.href = 'login.html';
+      });
+    };
+
+    function initRealtimeSync() {
+      onSnapshot(doc(db, "hospitals", HOSPITAL_ID), (doc) => {
+        if (doc.exists()) {
+          HOSPITAL_DATA = doc.data();
+          renderAll();
+        }
+      });
+    }
+
+    function renderAll() {
+      // Re-render current tab if active
+      // For simplicity, just re-render the view function of current tab
+      const activeTab = TABS.find(t => document.querySelector('.nav-tab.on').textContent === t.l);
+      if (activeTab) activeTab.fn();
+    }
+
+    // ── NAV ──
+    const TABS = [
+      { id: 'incoming', l: 'Incoming', fn: renderIncoming },
+      { id: 'depts', l: 'Departments', fn: renderDepts },
+      { id: 'blood', l: 'Blood Bank', fn: renderBlood }
+    ];
+    function setupNav() {
+      const c = $('nav-tabs'); c.innerHTML = '';
+      TABS.forEach((t, i) => {
+        const b = document.createElement('button'); b.className = 'nav-tab' + (i === 0 ? ' on' : '');
+        b.textContent = t.l;
+        b.onclick = () => { document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('on')); b.classList.add('on'); t.fn(); };
+        c.appendChild(b);
+      });
+      renderIncoming();
+    }
+
+    // ── RENDERERS ──
+    function renderIncoming() {
+      const depts = HOSPITAL_DATA?.departments || {};
+      $('content').innerHTML = `
+    <div class="panel">
+      <div class="panel-hdr"><div class="panel-title">Incoming Ambulances</div><span class="badge b-danger" id="inc-badge">0 Active</span></div>
+      <div id="inc-list" style="padding:24px; min-height:140px; color:var(--text-dim); text-align:center;">No active emergency transports inbound.</div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><div class="panel-title">Hospital Overview</div></div>
+      <div style="padding:24px;">
+        ${DEPTS.map(d => {
+        // Robust handling if dept doesn't exist in DB
+        const dt = depts[d.k] || { avail: 0, total: 0 };
+        const pct = dt.total > 0 ? Math.round((dt.avail / dt.total) * 100) : 0;
+        return `<div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+            <div style="width:30px; font-size:1.2rem;">${d.i}</div>
+            <div style="width:100px; font-weight:600; font-size:0.9rem;">${d.n}</div>
+            <div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:${100 - pct}%; background:${pct < 20 ? `var(--danger)` : `var(--success)`}"></div></div></div>
+            <div style="font-weight:700; width:50px; text-align:right;">${dt.avail} <span style="font-weight:400; font-size:0.8rem; color:var(--text-dim);">/ ${dt.total}</span></div>
+          </div>`
+      }).join('')}
+      </div>
+    </div>`;
+    }
+
+    function renderDepts() {
+      const depts = HOSPITAL_DATA?.departments || {};
+      let html = `<h2 style="font-size:1.5rem; font-weight:800; margin-bottom:20px;">Bed Management</h2><div class="dept-grid">`;
+      html += DEPTS.map(d => {
+        const dt = depts[d.k] || { avail: 0, total: 0 };
+        return `<div class="dept-card" onclick="openDept('${d.k}')">
+      <div class="dept-head"><div class="dept-icon" style="color:${d.c}; background:${d.c}15">${d.i}</div><span class="badge" style="background:${d.c}15; color:${d.c}">Open</span></div>
+      <div class="dept-name">${d.n}</div>
+      <div class="dept-stat">${dt.avail}</div>
+      <div class="dept-label">Available Beds (of ${dt.total})</div>
+    </div>`;
+      }).join('');
+      html += '</div><div id="bed-view"></div>';
+      $('content').innerHTML = html;
+    }
+
+    function renderBlood() {
+      const blood = HOSPITAL_DATA?.blood || {};
+      // Default blood types list to iterate
+      const types = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+
+      $('content').innerHTML = `<h2 style="font-size:1.5rem; font-weight:800; margin-bottom:20px;">Blood Inventory</h2>
+      <div class="blood-grid">${types.map(type => {
+        const units = blood[type] || 0;
+        // Assuming simplified capacity of 100 for visual
+        const pct = Math.min(units, 100);
+        const col = pct < 10 ? 'var(--danger)' : pct < 30 ? 'var(--warning)' : 'var(--success)';
+        return `<div class="b-card">
+          <div class="b-head"><div class="b-type" style="color:${col}">${type}</div><span class="badge" style="background:${col}15; color:${col}">${units}u</span></div>
+          <div style="font-weight:600; font-size:1.1rem; margin-bottom:8px;">${units} <span style="font-weight:400; font-size:0.9rem; color:var(--text-dim);">units</span></div>
+          <div class="prog-bar" style="height:4px;"><div class="prog-fill" style="width:${pct}%; background:${col}"></div></div>
+          <button class="b-btn" onclick="updateBlood('${type}', ${units})">Update Count</button>
+        </div>`
+      }).join('')}</div>`;
+    }
+
+    // ── ACTIONS ──
+    function openDept(k) {
+      const depts = HOSPITAL_DATA?.departments || {};
+      const d = DEPTS.find(x => x.k === k);
+      const dt = depts[k] || { avail: 0, total: 20 };
+
+      const v = $('bed-view');
+      v.innerHTML = `<div class="panel" style="animation:up 0.3s">
+        <div class="panel-hdr">
+            <div class="panel-title">${d.i} ${d.n} Quick Update</div>
+            <button class="b-btn" style="width:auto; margin:0;" onclick="$('bed-view').innerHTML=''">Close</button>
+        </div>
+        <div style="padding:24px; text-align:center;">
+             <h3 style="margin-bottom:16px; font-size:2rem;">${dt.avail} <span style="font-size:1rem; color:var(--text-dim); font-weight:500;">Available Beds</span></h3>
+             <div style="display:flex; justify-content:center; gap:20px;">
+                <button class="b-btn" style="width:120px; font-size:1.5rem; border-color:var(--danger); color:var(--danger);" onclick="updateBeds('${k}', -1)">-</button>
+                <button class="b-btn" style="width:120px; font-size:1.5rem; border-color:var(--success); color:var(--success);" onclick="updateBeds('${k}', 1)">+</button>
+             </div>
+             <p style="margin-top:16px; color:var(--text-dim); font-size:0.85rem;">Tap to decrease/increase available count.</p>
+        </div>
+      </div>`;
+      v.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function updateBeds(deptKey, change) {
+      if (!HOSPITAL_ID) return;
+
+      const currentRef = HOSPITAL_DATA.departments[deptKey];
+      if (!currentRef) return; // Should not happen if initialized
+
+      const newAvail = Math.max(0, Math.min(currentRef.avail + change, currentRef.total));
+
+      try {
+        if (HOSPITAL_ID === 'demo_hospital') {
+          HOSPITAL_DATA.departments[deptKey].avail = newAvail;
+          renderDepts(); // manual re-render for demo
+          openDept(deptKey); // keep view open and updated
+          return;
+        }
+
+        // Firebase update
+        const updatePath = `departments.${deptKey}.avail`;
+        await updateDoc(doc(db, "hospitals", HOSPITAL_ID), {
+          [updatePath]: newAvail
+        });
+        // Snapshot will auto-update UI
+        openDept(deptKey); // To refresh the modal number specifically (though snapshot triggers renderAll which wipes modal, actually we need to be careful)
+        // Ideally snapshot listener handles it, but openDept modal might be overwritten by renderAll().
+        // Let's rely on fast re-render.
+
+      } catch (e) {
+        console.error(e);
+        toast("Update failed", 'var(--danger)');
+      }
+    }
+
+    async function updateBlood(type, currentVal) {
+      const n = prompt(`Update ${type} units:`, currentVal);
+      if (n && !isNaN(n)) {
+        const newVal = parseInt(n);
+
+        if (HOSPITAL_ID === 'demo_hospital') {
+          HOSPITAL_DATA.blood[type] = newVal;
+          renderBlood();
+          return;
+        }
+
+        try {
+          const updatePath = `blood.${type}`;
+          await updateDoc(doc(db, "hospitals", HOSPITAL_ID), {
+            [updatePath]: newVal
+          });
+          toast(`${type} updated`, 'var(--success)');
+        } catch (e) {
+          console.error(e);
+          toast("Update failed", 'var(--danger)');
+        }
+      }
+    }
+
+    // ── EVENTS ──
+    if (BC) BC.onmessage = ({ data }) => {
+      if (data.type === 'proximity' || data.type === 'location') {
+        const l = $('inc-list');
+        if (l) {
+          if (l.innerText.includes('No active')) l.innerHTML = '';
+          const km = data.dist.toFixed(1);
+          const isNew = !document.getElementById('amb-Inc');
+          l.innerHTML = `<div class="inc-card" id="amb-Inc">
+        <div class="inc-dist">${km}<span style="font-size:1rem;font-weight:600;margin-left:4px">km</span></div>
+        <div class="inc-info"><div class="inc-name">AMB-101 (Incoming)</div><div class="inc-cond">${data.patient?.condition || 'Emergency'}</div><div style="font-size:0.8rem; color:var(--text-dim);">Patient: ${data.patient?.name || 'Unknown'}</div></div>
+        <div class="badge b-danger">ETA ${Math.ceil(data.dist * 1.5)}m</div>
+      </div>`;
+          $('inc-badge').textContent = '1 Active';
+        }
+        // Alarm
+        if (data.dist < 2 && !document.getElementById('alarm').classList.contains('show')) {
+          $('alarm-text').textContent = `AMBULANCE ${data.dist.toFixed(1)}KM AWAY — PREPARE TRAUMA`;
+          $('alarm').classList.add('show');
+        }
+      }
+    };
+
+    setupNav();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediGrid — Blood Donor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ── THEME TOKENS (RED & WHITE) ── */
+        :root {
+            --bg: #ffffff;
+            --surface: #ffffff;
+            --primary: #D80032;
+            /* Deep Red */
+            --primary-dark: #b9002d;
+            --accent: #FFEBEE;
+            --text: #2B2D42;
+            --text-light: #8D99AE;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── UI KIT ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(216, 0, 50, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(216, 0, 50, 0.4);
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* ── LAYOUT ── */
+        nav {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .hero {
+            padding: 100px 20px 80px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            color: var(--text);
+        }
+
+        h1 span {
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 24px;
+            background: var(--accent);
+            border-radius: 16px;
+        }
+
+        .stat-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* ── LISTS ── */
+        .drive-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .drive-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .di-main {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .di-date {
+            text-align: center;
+            background: var(--accent);
+            padding: 12px 16px;
+            border-radius: 12px;
+            min-width: 80px;
+            color: var(--primary);
+        }
+
+        .di-day {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .di-month {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .di-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .di-info p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ── TIPS ── */
+        .tips-scroll {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding-bottom: 30px;
+        }
+
+        .tip-card {
+            min-width: 280px;
+            background: white;
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .tip-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .tip-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        /* ── FAB ── */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(216, 0, 50, 0.4);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: var(--primary-dark);
+        }
+
+        @media(max-width:768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drive-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .drive-item .btn {
+                width: 100%;
+            }
+
+            nav {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">🩸</div> MediGrid Donor
+        </div>
+        <a href="index.html" class="btn btn-outline" style="padding:8px 20px; font-size:0.8rem;">← Back to Home</a>
+    </nav>
+
+    <div class="hero">
+        <h1>Give Blood.<br><span>Save a Life.</span></h1>
+        <p class="subtitle">Your contribution makes a difference. Manage your donations, find drives nearby, and track
+            your impact on the community.</p>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-val">3</div>
+                <div class="stat-lbl">Donations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-val" style="color:var(--primary)">9</div>
+                <div class="stat-lbl">Lives Saved</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-val">A+</div>
+                <div class="stat-lbl">Blood Type</div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:16px; justify-content:center;">
+            <button class="btn btn-primary" onclick="alert('Booking flow disabled in demo')">Schedule Donation</button>
+            <button class="btn btn-outline"
+                onclick="document.getElementById('drives').scrollIntoView({behavior:'smooth'})">Find Drives ↓</button>
+        </div>
+    </div>
+
+    <main style="max-width:1000px; margin:0 auto; padding:0 20px 80px;">
+
+        <div id="drives" style="margin-bottom:80px;">
+            <h2 class="section-title">Upcoming Drives</h2>
+            <div class="drive-list">
+                <div class="drive-item">
+                    <div class="di-main">
+                        <div class="di-date">
+                            <span class="di-day">12</span>
+                            <span class="di-month">OCT</span>
+                        </div>
+                        <div class="di-info">
+                            <h3>City Center Mall</h3>
+                            <p>Main Atrium · 10:00 AM - 4:00 PM</p>
+                            <div style="margin-top:8px;"><span class="tag">High Demand: A+</span></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">Book Slot</button>
+                </div>
+
+                <div class="drive-item">
+                    <div class="di-main">
+                        <div class="di-date">
+                            <span class="di-day">15</span>
+                            <span class="di-month">OCT</span>
+                        </div>
+                        <div class="di-info">
+                            <h3>Metro Hospital Campus</h3>
+                            <p>Block B, Ground Floor · 9:00 AM - 5:00 PM</p>
+                            <div style="margin-top:8px;"><span class="tag">All Types Needed</span></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">Book Slot</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="section-title">Health Tips</h2>
+            <div class="tips-scroll">
+                <div class="tip-card">
+                    <span class="tip-icon">💧</span>
+                    <h3>Hydrate Well</h3>
+                    <p style="color:var(--text-light); line-height:1.6;">Drink an extra 16 oz. of water before your
+                        appointment. Healthy hydration flows better.</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-icon">🥗</span>
+                    <h3>Iron Rich Diet</h3>
+                    <p style="color:var(--text-light); line-height:1.6;">Eat iron-rich foods like red meat, fish,
+                        poultry, beans, spinach, or iron-fortified cereals.</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-icon">💤</span>
+                    <h3>Rest Up</h3>
+                    <p style="color:var(--text-light); line-height:1.6;">Get at least 8 hours of sleep the night before
+                        you plan to donate.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="fab" onclick="alert('Emergency features are not for donors')">+</div>
+
+</body>
+
+</html>

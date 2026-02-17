@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediGrid — Register Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D80032;
+            --bg: #f8f9fa;
+            --text: #2B2D42;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .reg-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="reg-card">
+        <h2>Register Facility</h2>
+        <form onsubmit="handleReg(event)">
+            <input type="text" id="h-name" class="form-input" placeholder="Hospital Name" required>
+            <input type="text" id="h-loc" class="form-input" placeholder="Location/District" required>
+            <input type="tel" id="h-phone" class="form-input" placeholder="Emergency Phone" required>
+            <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+            <input type="email" id="h-email" class="form-input" placeholder="Admin Email" required>
+            <input type="password" id="h-pass" class="form-input" placeholder="Password" required>
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+        <div style="text-align:center; margin-top:20px; font-size:0.9rem;">
+            <a href="login.html" style="color:var(--primary); text-decoration:none; font-weight:600;">Back to Login</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, createUserWithEmailAndPassword, db, setDoc, doc } from './firebase_config.js';
+
+        window.handleReg = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('h-name').value;
+            const email = document.getElementById('h-email').value;
+            const pass = document.getElementById('h-pass').value;
+            const loc = document.getElementById('h-loc').value;
+            const phone = document.getElementById('h-phone').value;
+
+            try {
+                // 1. Create Auth User
+                const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                const uid = userCred.user.uid;
+
+                // 2. Create Firestore Document
+                // Using setDoc with specific ID (uid) makes it easy to find later
+                await setDoc(doc(db, "hospitals", uid), {
+                    name: name,
+                    location: loc,
+                    phone: phone,
+                    email: email,
+                    // Default empty inventory
+                    departments: {
+                        icu: { available: 0, total: 20 },
+                        general: { available: 0, total: 50 }
+                    },
+                    blood: {
+                        'A+': 0, 'A-': 0, 'B+': 0, 'B-': 0, 'O+': 0, 'O-': 0, 'AB+': 0, 'AB-': 0
+                    }
+                });
+
+                alert("Registration Successful! Please login.");
+                window.location.href = 'login.html';
+            } catch (err) {
+                console.error(err);
+                alert("Error: " + err.message);
+            }
+        };
+    </script>
+
+</body>
+
+</html>

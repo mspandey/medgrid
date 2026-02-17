@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>MediGrid — Driver Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --primary: #D80032;
+      --primary-dark: #b9002d;
+      --text: #2B2D42;
+      --text-dim: #8D99AE;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column
+    }
+
+    /* ── NAV ── */
+    nav {
+      height: 64px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: 6px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-badge {
+      background: #e6fcf5;
+      color: #0ca678;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-left: 10px;
+    }
+
+    /* ── CONTENT ── */
+    .screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* STANDBY */
+    .standby-box {
+      margin: auto;
+      text-align: center;
+      padding: 40px;
+      border: 2px dashed var(--border);
+      border-radius: 20px;
+      max-width: 400px;
+    }
+
+    .standby-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: var(--text-dim);
+    }
+
+    .standby-txt {
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-success {
+      background: #0ca678;
+      color: white;
+    }
+
+    /* DISPATCH */
+    .dispatch-card {
+      background: white;
+      border: 1px solid var(--primary);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(216, 0, 50, 0.1);
+      text-align: center;
+      animation: popIn 0.3s;
+      margin: auto;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .d-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .d-main {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .d-sub {
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+
+    .pulse-ring {
+      width: 80px;
+      height: 80px;
+      background: rgba(216, 0, 50, 0.1);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 1.5s infinite;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(216, 0, 50, 0.4)
+      }
+
+      70% {
+        box-shadow: 0 0 0 20px transparent
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 transparent
+      }
+    }
+
+    /* EN ROUTE */
+    .route-info {
+      background: var(--primary);
+      color: white;
+      padding: 24px;
+      border-radius: 0 0 24px 24px;
+      margin: -20px -20px 20px;
+    }
+
+    .big-dist {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .eta-lbl {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .pt-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .pt-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .pt-lbl {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .pt-val {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .alert-feed {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .alert-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: #fff0f3;
+      color: var(--primary);
+      border-left: 4px solid var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      animation: slideLeft 0.3s;
+    }
+
+    @keyframes slideLeft {
+      from {
+        transform: translateX(20px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="brand">
+      <div class="brand-icon">🚑</div> AMB-101
+    </div>
+    <div style="display:flex;align-items:center;">
+      <span class="status-badge" id="status-badge">Standby</span>
+      <a href="index.html"
+        style="margin-left:14px; text-decoration:none; color:var(--text-dim); font-weight:600; font-size:0.85rem;">✕</a>
+    </div>
+  </nav>
+
+  <!-- STANDBY -->
+  <div id="screen-standby" class="screen">
+    <div class="standby-box">
+      <div class="standby-icon">📡</div>
+      <div class="standby-txt">Unit is online and ready for dispatch.</div>
+      <button class="btn btn-primary" onclick="simulateDispatch()">▶ SIMULATE EMERGENCY CALL</button>
+    </div>
+  </div>
+
+  <!-- DISPATCH OFFER -->
+  <div id="screen-offer" class="screen hidden" style="background:rgba(0,0,0,0.05)">
+    <div class="dispatch-card">
+      <div class="pulse-ring">⚡</div>
+      <div class="d-title">Incoming Priority 1</div>
+      <div class="d-main">Cardiac Arrest</div>
+      <div class="d-sub">Male, 54y · 3.2 km away</div>
+      <button class="btn btn-primary" onclick="acceptDispatch()">✔ ACCEPT & RESPOND</button>
+    </div>
+  </div>
+
+  <!-- EN ROUTE -->
+  <div id="screen-route" class="screen hidden">
+    <div class="route-info">
+      <div class="big-dist" id="dist-display">3.2</div>
+      <div class="eta-lbl">Kilometers to Destination</div>
+    </div>
+
+    <div class="pt-card">
+      <div class="pt-row"><span class="pt-lbl">Patient</span><span class="pt-val">John Doe (54)</span></div>
+      <div class="pt-row"><span class="pt-lbl">Condition</span><span class="pt-val" style="color:var(--primary)">Cardiac
+          Arrest</span></div>
+      <div class="pt-row"><span class="pt-lbl">Hospital</span><span class="pt-val">Metro North Govt.</span></div>
+    </div>
+
+    <div
+      style="font-weight:700; margin-bottom:10px; font-size:0.9rem; color:var(--text-dim); text-transform:uppercase;">
+      Live Telementry Feed</div>
+    <div class="alert-feed" id="alert-feed"></div>
+  </div>
+
+  <!-- ARRIVED -->
+  <div id="screen-arrived" class="screen hidden">
+    <div class="standby-box" style="border-color:#0ca678; background:#e6fcf5;">
+      <div class="standby-icon" style="color:#0ca678">✅</div>
+      <h2 style="margin-bottom:10px;">Arrived at Scene</h2>
+      <p style="color:#0ca678; margin-bottom:24px;">Patient handover to trauma team initiate.</p>
+      <button class="btn btn-success" onclick="resetSim()">COMPLETE MISSION</button>
+    </div>
+  </div>
+
+  <script>
+    let dist = 3.2; let interval;
+    const BC = new BroadcastChannel('medigrid');
+
+    const $ = id => document.getElementById(id);
+    const screens = ['screen-standby', 'screen-offer', 'screen-route', 'screen-arrived'];
+    function show(id) { screens.forEach(s => $(s).classList.add('hidden')); $(id).classList.remove('hidden'); }
+
+    function simulateDispatch() {
+      show('screen-offer');
+      $('status-badge').textContent = 'Dispatching...';
+      $('status-badge').style.background = '#fff9db'; $('status-badge').style.color = '#f59f00';
+    }
+
+    function acceptDispatch() {
+      show('screen-route');
+      $('status-badge').textContent = 'En Route';
+      $('status-badge').style.background = '#fff0f3'; $('status-badge').style.color = '#D80032';
+      $('alert-feed').innerHTML = '';
+      dist = 3.2;
+
+      // Start drive
+      interval = setInterval(() => {
+        dist -= 0.1;
+        if (dist <= 0) { dist = 0; arrived(); }
+        $('dist-display').textContent = dist.toFixed(1);
+
+        // Broadcast
+        if (BC) BC.postMessage({ type: 'proximity', dist: dist, ambulance: 'AMB-101', patient: { name: 'John Doe', condition: 'Cardiac Arrest' } });
+
+        // Local alerts
+        if (Math.abs(dist - 2.0) < 0.05) addAlert('Hospital notified: Trauma Team Activating');
+        if (Math.abs(dist - 1.0) < 0.05) addAlert('Traffic Signal Preemption Active');
+        if (Math.abs(dist - 0.5) < 0.05) addAlert('Hospital Gate: OPEN');
+
+      }, 800);
+    }
+
+    function addAlert(txt) {
+      const d = document.createElement('div'); d.className = 'alert-item'; d.innerText = txt;
+      $('alert-feed').prepend(d);
+    }
+
+    function arrived() {
+      clearInterval(interval);
+      show('screen-arrived');
+      $('status-badge').textContent = 'On Scene';
+      $('status-badge').style.background = '#e6fcf5'; $('status-badge').style.color = '#0ca678';
+      if (BC) BC.postMessage({ type: 'arrived', ambulance: 'AMB-101' });
+    }
+
+    function resetSim() {
+      show('screen-standby');
+      $('status-badge').textContent = 'Standby';
+      $('status-badge').style.background = '#e7f5ff'; $('status-badge').style.color = '#0077ff';
+    }
+  </script>
+</body>
+
+</html>

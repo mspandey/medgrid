@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediGrid — Emergency Response Network</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --primary: #D80032;
+      /* Deep Red */
+      --primary-dark: #b9002d;
+      --accent: #FFEBEE;
+      --text: #2B2D42;
+      --text-light: #8D99AE;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .nav-btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .btn-red {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-red:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--primary);
+      color: #fff;
+      padding: 80px 20px 160px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -50px;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: #fff;
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+      transform: scaleX(1.5);
+    }
+
+    .hero-content {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      backdrop-filter: blur(4px);
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      line-height: 1.2;
+      font-weight: 800;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+
+    .sub-hero {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-btn {
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hb-white {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    .hb-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .hb-trans {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+
+    .hb-trans:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ── FEATURES / PORTALS ── */
+    .section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .sec-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid #eee;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--accent);
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 24px;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card p {
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .card-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .card-link:hover {
+      background: var(--primary-dark);
+    }
+
+    /* ── HOSPITAL LIST (NEW) ── */
+    .hosp-list {
+      margin-top: 60px;
+      text-align: left;
+    }
+
+    .hosp-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .hosp-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .hosp-sub {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .hosp-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: #e6fcf5;
+      color: #0ca678;
+    }
+
+    @media(max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="brand">
+      <div class="logo-icon">M</div> MediGrid
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Home</a>
+      <a href="#portals" class="nav-link">Portals</a>
+      <a href="#hospitals" class="nav-link">Hospitals</a>
+      <a href="#" class="nav-link">About</a>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <a href="blood_donor.html" class="nav-btn btn-outline">Blood Donor</a>
+      <a href="system_admin.html" class="nav-btn btn-red">Facility Login</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="pill">❤️ Saving Lives Every Day</div>
+      <h1>Connect Emergency Services<br>with Those in Need</h1>
+      <p class="sub-hero">
+        Our advanced hospital network ensures efficient coordination between ambulances, blood banks, and medical
+        facilities to save lives when every second counts.
+      </p>
+      <div class="hero-btns">
+        <a href="driver_console.html" class="hero-btn hb-white">Run Simulation</a>
+        <a href="#portals" class="hero-btn hb-trans">Explore Portals</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTALS -->
+  <div class="section" id="portals">
+    <h2 class="sec-title">Access Our Portals</h2>
+    <div class="grid">
+      <!-- Admin -->
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3>System Admin</h3>
+        <p>Comprehensive dashboard for district-level oversight, resource tracking, and system configuration.</p>
+        <a href="system_admin.html" class="card-link">Launch Console →</a>
+      </div>
+
+      <!-- Staff -->
+      <div class="card">
+        <div class="card-icon">🏥</div>
+        <h3>Hospital Staff</h3>
+        <p>Manage bed availability, view incoming ambulances, and update blood inventory in real-time.</p>
+        <a href="staff_portal.html" class="card-link">Staff Login →</a>
+      </div>
+
+      <!-- Driver -->
+      <div class="card">
+        <div class="card-icon">🚑</div>
+        <h3>Ambulance Driver</h3>
+        <p>Mobile-optimized interface for live navigation, alerts, and patient data during transport.</p>
+        <a href="driver_console.html" class="card-link">Start Driving →</a>
+      </div>
+
+      <!-- Donor -->
+      <div class="card">
+        <div class="card-icon">🩸</div>
+        <h3>Blood Donor</h3>
+        <p>Schedule appointments, view donation history, and find local drives nearby to save lives.</p>
+        <a href="blood_donor.html" class="card-link">Donate Now →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOSPITALS (Requested Feature) -->
+  <div class="section" id="hospitals" style="background:#f8f9fa; border-radius:24px; margin-top:40px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+      <h2 class="sec-title" style="margin:0; font-size:1.8rem;">Partner Hospitals</h2>
+      <a href="staff_portal.html" style="color:var(--primary); font-weight:700; text-decoration:none;">View All →</a>
+    </div>
+
+    <div class="hosp-list">
+      <div class="hosp-item">
+        <div class="hosp-info">
+          <h4>Metro North Govt. Hospital</h4>
+          <div class="hosp-sub">Tertiary Care · 3.2 km away</div>
+        </div>
+        <div class="hosp-action">
+          <span class="hosp-badge">Open 24/7</span>
+        </div>
+      </div>
+
+      <div class="hosp-item">
+        <div class="hosp-info">
+          <h4>City General Hospital</h4>
+          <div class="hosp-sub">Secondary Care · 4.1 km away</div>
+        </div>
+        <div class="hosp-action">
+          <span class="hosp-badge">Limited Beds</span>
+        </div>
+      </div>
+
+      <div class="hosp-item">
+        <div class="hosp-info">
+          <h4>Apollo District Hospital</h4>
+          <div class="hosp-sub">Govt-Aided · 6.2 km away</div>
+        </div>
+        <div class="hosp-action">
+          <span class="hosp-badge">Open 24/7</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="text-align:center; padding:40px; color:var(--text-light); font-size:0.9rem; margin-top:40px;">
+    © 2026 MediGrid System. All rights reserved.
+  </footer>
+
+</body>
+
+</html>

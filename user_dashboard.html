@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediGrid — User Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #D80032;
+            --bg: #f8f9fa;
+            --text: #2B2D42;
+            --text-light: #8D99AE;
+            --border: #e2e8f0;
+            --success: #0ca678;
+            --warning: #f59f00;
+            --danger: #D80032;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text);
+            padding-bottom: 40px;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 40px;
+            transition: 0.2s;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .search-bar:focus {
+            border-color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .hosp-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .hosp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+
+        .hc-head {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .hc-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .hc-loc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hc-body {
+            padding: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-pill {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .sp-lbl {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .sp-val {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .blood-grid {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .blood-badge {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            background: #f1f3f5;
+            color: var(--text-light);
+        }
+
+        .blood-badge.avail {
+            background: #e6fcf5;
+            color: var(--success);
+        }
+
+        .blood-badge.crit {
+            background: #fff0f3;
+            color: var(--danger);
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .m-card {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">M <span>MediGrid</span></div>
+        <div class="nav-links">
+            <a href="blood_donor.html">Donate Blood</a>
+            <a href="login.html">Login</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Find Care Nearby</h1>
+        <input type="text" class="search-bar" placeholder="Search hospitals by name, location, or address..."
+            oninput="filterHospitals(this.value)">
+
+        <div id="loading" style="text-align:center; color:var(--text-light);">Loading hospitals...</div>
+        <div class="grid" id="hosp-grid"></div>
+    </div>
+
+    <script type="module">
+        import { db, collection, getDocs, onSnapshot } from './firebase_config.js';
+
+        let allHospitals = [];
+
+        // 1. Fetch Hospitals Realtime
+        const q = collection(db, "hospitals");
+        onSnapshot(q, (snapshot) => {
+            document.getElementById('loading').style.display = 'none';
+            allHospitals = [];
+            snapshot.forEach((doc) => {
+                allHospitals.push({ id: doc.id, ...doc.data() });
+            });
+            render(allHospitals);
+        }, (err) => {
+            // Demo Mode Fallback
+            console.log("Firebase error (likely no keys), using demo data");
+            allHospitals = [
+                { name: "Metro General Hospital", location: "Downtown", departments: { icu: { available: 3, total: 10 }, general: { available: 45, total: 100 } }, blood: { 'A+': 10, 'O-': 2 } },
+                { name: "City Care Clinic", location: "Westside", departments: { icu: { available: 0, total: 5 }, general: { available: 12, total: 30 } }, blood: { 'A+': 0, 'O+': 15 } }
+            ];
+            render(allHospitals);
+        });
+
+        function render(list) {
+            const grid = document.getElementById('hosp-grid');
+            grid.innerHTML = list.map(h => {
+                const icu = h.departments?.icu || { available: 0, total: 0 };
+                const gen = h.departments?.general || { available: 0, total: 0 };
+
+                // Determine Blood Badges
+                const bloodHtml = Object.entries(h.blood || {}).map(([type, units]) => {
+                    if (units > 0) return `<span class="blood-badge avail">${type}</span>`;
+                    return '';
+                }).join('');
+
+                return `
+    <div class="hosp-card">
+      <div class="hc-head">
+        <div>
+          <div class="hc-title">${h.name}</div>
+          <div class="hc-loc">📍 ${h.location}</div>
+        </div>
+        <div style="text-align:right; font-size:0.8rem; color:var(--text-light);">${h.phone || ''}</div>
+      </div>
+      <div class="hc-body">
+        <div class="stat-row">
+          <div class="stat-pill" style="background:${icu.available > 0 ? '#e6fcf5' : '#fff0f3'}; color:${icu.available > 0 ? '#0ca678' : '#D80032'}">
+            <span class="sp-lbl">ICU Beds</span>
+            <span class="sp-val">${icu.available}</span> <span style="font-size:0.8rem; font-weight:400;">/ ${icu.total}</span>
+          </div>
+          <div class="stat-pill" style="background:${gen.available > 0 ? '#e7f5ff' : '#fff0f3'}; color:${gen.available > 0 ? '#0077ff' : '#D80032'}">
+            <span class="sp-lbl">General Beds</span>
+            <span class="sp-val">${gen.available}</span> <span style="font-size:0.8rem; font-weight:400;">/ ${gen.total}</span>
+          </div>
+        </div>
+        <div style="font-size:0.75rem; font-weight:700; color:var(--text-light); margin-bottom:6px; text-transform:uppercase;">Blood Available</div>
+        <div class="blood-grid">${bloodHtml || '<span style="font-size:0.8rem; color:#aaa;">No stock info</span>'}</div>
+      </div>
+    </div>
+    `;
+            }).join('');
+        }
+
+        window.filterHospitals = (txt) => {
+            const lower = txt.toLowerCase();
+            const filtered = allHospitals.filter(h =>
+                h.name.toLowerCase().includes(lower) ||
+                h.location.toLowerCase().includes(lower)
+            );
+            render(filtered);
+        };
+    </script>
+
+</body>
+
+</html>
