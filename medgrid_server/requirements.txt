@@ -1,0 +1,24 @@
+# MedGrid Backend Dependencies
+# Install with: pip install -r requirements.txt
+
+# Django & REST Framework
+django>=4.2,<5.0
+djangorestframework>=3.14
+django-cors-headers>=4.0
+
+# RAG Chatbot
+chromadb>=0.4.0
+sentence-transformers>=2.2.2
+huggingface-hub>=0.20.0
+langchain>=0.1.0
+torch>=2.0.0
+transformers>=4.35.0
+
+# Data & Utilities
+pandas>=2.0.0
+numpy>=1.24.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Rich terminal output (used in RAG scripts)
+rich>=13.0.0
