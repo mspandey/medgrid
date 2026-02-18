@@ -61,17 +61,21 @@ Whether you are a hospital administrator managing ICU beds, an ambulance driver 
 
 ---
 
+## 🎬 Project Demo
+
+https://github.com/Esingh-byte/medgrid/raw/main/medgrid.mp4
+
+---
+
 ## 📸 Screenshots
 
-| Page | Preview |
+| | |
 |---|---|
-| 🏠 **Landing Page** | ![Landing Page](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/landing.png) |
-| 🏥 **Hospital Dashboard** | ![Dashboard](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/dashboard.png) |
-| 🛏️ **Staff Portal — Beds** | ![Staff Portal](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/staff_portal.png) |
-| 🩸 **Blood Donation Form** | ![Blood Donation](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/blood_donation.png) |
-| 🤖 **AI Chatbot** | ![Chatbot](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/chatbot.png) |
-
-> 📌 **To add screenshots:** Take screenshots of the app, place them in a `screenshots/` folder at the root of the repo, and push to GitHub. The table above will auto-display them.
+| ![Screenshot 1](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/1.png) | ![Screenshot 2](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/2.png) |
+| ![Screenshot 3](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/3.png) | ![Screenshot 4](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/4.png) |
+| ![Screenshot 5](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/5.png) | ![Screenshot 6](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/6.png) |
+| ![Screenshot 7](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/7.png) | ![Screenshot 8](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/8.png) |
+| ![Screenshot 9](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/9.png) | ![Screenshot 10](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/10.png) |
 
 ---
 
