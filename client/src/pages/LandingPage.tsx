@@ -127,7 +127,7 @@ const LandingPage = () => {
             <section className="py-24 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-16">
                     <div className="md:w-1/2">
-                        <img src="https://images.unsplash.com/photo-1551076882-68b47d19d60f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80" className="rounded-3xl shadow-2xl" alt="About MedGrid" />
+                        <img src="/doctor.jpg" className="rounded-3xl shadow-2xl w-full object-contain" alt="About MedGrid" />
                     </div>
                     <div className="md:w-1/2">
                         <p className="text-orthoGreen font-bold tracking-widest uppercase mb-2">About Us</p>

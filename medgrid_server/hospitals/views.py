@@ -226,3 +226,100 @@ def get_ai_recommendation(request):
         
     recommendations = recommend_hospital(amb_lat, amb_lon, condition, blood_group)
     return Response(recommendations)
+
+
+@api_view(['POST'])
+def blood_donation(request):
+    """Register a blood donor and send a confirmation email."""
+    from django.core.mail import send_mail
+    from django.conf import settings as django_settings
+
+    data = request.data
+    donor_name = data.get('fullName', 'Donor')
+    donor_email = data.get('email', '')
+    blood_group = data.get('bloodGroup', 'Unknown')
+
+    # Save to DB
+    try:
+        donor = BloodDonor.objects.create(
+            full_name=donor_name,
+            blood_group=blood_group,
+            age=int(data.get('age', 0) or 0),
+            gender=data.get('gender', ''),
+            weight=float(data.get('weight', 0) or 0),
+            phone=data.get('phone', ''),
+            email=donor_email,
+            address=data.get('address', ''),
+            healthy_today=data.get('healthyToday', False),
+            recent_illness=data.get('recentIllness', False),
+            chronic_diseases=data.get('chronicDiseases', False),
+            recent_surgery=data.get('recentSurgery', False),
+            taking_meds=data.get('takingMeds', False),
+            pregnancy=data.get('pregnancy', False),
+            tattoo_piercing=data.get('tattooPiercing', False),
+            history_high_risk=data.get('historyHighRisk', False),
+            first_time_donor=data.get('firstTimeDonor', True),
+            emergency_donor=data.get('emergencyDonor', False),
+            preferred_time=data.get('preferredTime', ''),
+            consent_agreed=data.get('voluntaryAgreed', False),
+        )
+    except Exception as e:
+        return Response({'msg': f'DB error: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    # Find a hospital to direct the donor to
+    hospital = Hospital.objects.first()
+    hospital_name = hospital.name if hospital else 'MedGrid Partner Hospital'
+    hospital_address = hospital.full_address if hospital and hospital.full_address else hospital.location if hospital else 'Please visit your nearest hospital'
+    hospital_phone = hospital.phone if hospital else 'N/A'
+
+    # Send confirmation email if email provided
+    if donor_email:
+        subject = '🩸 Blood Donor Registration Confirmed — MedGrid'
+        message = f"""Dear {donor_name},
+
+Thank you for registering as a blood donor on MedGrid! Your generosity can save lives. ❤️
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+YOUR REGISTRATION DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Name        : {donor_name}
+Blood Group : {blood_group}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEXT STEPS — PLEASE VISIT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Hospital    : {hospital_name}
+Address     : {hospital_address}
+Contact     : {hospital_phone}
+
+Please visit the hospital at your earliest convenience to:
+  1. Get a quick health screening & blood test
+  2. Complete your donation (takes ~30 minutes)
+  3. Receive your donor certificate
+
+Bring a valid ID and stay hydrated before your visit.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Thank you for being a hero. 🦸
+— Team MedGrid
+"""
+        try:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=django_settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[donor_email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            # Don't fail the registration if email fails
+            print(f"Email send failed: {e}")
+
+    return Response({
+        'msg': 'Registration successful! A confirmation email has been sent.',
+        'donor_id': donor.id,
+        'hospital': hospital_name,
+        'hospital_address': hospital_address,
+    }, status=status.HTTP_201_CREATED)
+
