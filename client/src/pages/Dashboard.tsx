@@ -2,27 +2,25 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, MapPin, Activity } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { User } from '../App';
 
 interface Department {
-    avail: number;
+    name: string;
+    available: number; // Changed from avail
     total: number;
 }
 
 interface Hospital {
-    _id: string;
+    id: number; // Changed from _id
     name: string;
     location: string;
-    departments: {
-        icu: Department;
-        general: Department;
-        nicu: Department;
-    };
-    blood: Record<string, number>;
+    departments: Department[]; // Changed from object
+    blood_inventory: { blood_group: string; units: number }[]; // Changed from Record
     doctors?: { name: string; specialty: string; available: boolean }[];
 }
 
 interface DashboardProps {
-    user?: { name: string; role: 'user' | 'hospital' } | null;
+    user?: User | null;
     logout?: () => void;
 }
 
@@ -38,7 +36,7 @@ const Dashboard = ({ user, logout }: DashboardProps) => {
     const fetchHospitals = async (q: string = '') => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:5000/api/hospitals?search=${q}`);
+            const res = await axios.get(`http://localhost:8000/api/hospitals/?search=${q}`);
             setHospitals(res.data);
         } catch (err) {
             console.error(err);
@@ -56,6 +54,10 @@ const Dashboard = ({ user, logout }: DashboardProps) => {
     const allDoctors = hospitals.flatMap(h =>
         (h.doctors || []).map(d => ({ ...d, hospitalName: h.name, location: h.location }))
     );
+
+    const getDept = (h: Hospital, name: string) => {
+        return h.departments.find(d => d.name === name) || { available: 0, total: 0 };
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20 font-sans">
@@ -111,12 +113,12 @@ const Dashboard = ({ user, logout }: DashboardProps) => {
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                     {hospitals.map(h => {
-                                        const icu = h.departments?.icu || { avail: 0, total: 0 };
-                                        const gen = h.departments?.general || { avail: 0, total: 0 };
-                                        const isAvailable = (icu.avail + gen.avail) > 0;
+                                        const icu = getDept(h, 'ICU');
+                                        const gen = getDept(h, 'General');
+                                        const isAvailable = (icu.available + gen.available) > 0;
 
                                         return (
-                                            <div key={h._id} className="bg-white rounded-3xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-sm cursor-pointer group">
+                                            <div key={h.id} className="bg-white rounded-3xl border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-sm cursor-pointer group">
                                                 <div className="p-8">
                                                     <div className="flex justify-between items-start mb-6">
                                                         <div>
@@ -131,13 +133,13 @@ const Dashboard = ({ user, logout }: DashboardProps) => {
                                                     </div>
 
                                                     <div className="flex gap-4 mb-8">
-                                                        <div className={`flex-1 p-4 rounded-2xl text-center ${icu.avail > 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                                        <div className={`flex-1 p-4 rounded-2xl text-center ${icu.available > 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
                                                             <div className="text-xs uppercase font-bold opacity-60 mb-2">ICU Beds</div>
-                                                            <div className="text-2xl font-black">{icu.avail} <span className="text-sm font-medium opacity-50">/ {icu.total}</span></div>
+                                                            <div className="text-2xl font-black">{icu.available} <span className="text-sm font-medium opacity-50">/ {icu.total}</span></div>
                                                         </div>
-                                                        <div className={`flex-1 p-4 rounded-2xl text-center ${gen.avail > 0 ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700'}`}>
+                                                        <div className={`flex-1 p-4 rounded-2xl text-center ${gen.available > 0 ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700'}`}>
                                                             <div className="text-xs uppercase font-bold opacity-60 mb-2">General</div>
-                                                            <div className="text-2xl font-black">{gen.avail} <span className="text-sm font-medium opacity-50">/ {gen.total}</span></div>
+                                                            <div className="text-2xl font-black">{gen.available} <span className="text-sm font-medium opacity-50">/ {gen.total}</span></div>
                                                         </div>
                                                     </div>
                                                 </div>

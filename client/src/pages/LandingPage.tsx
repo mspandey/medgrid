@@ -1,4 +1,5 @@
 import { ArrowRight, Heart, Activity, Stethoscope, BriefcaseMedical } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const LandingPage = () => {
@@ -117,7 +118,7 @@ const LandingPage = () => {
                     </div>
 
                     <div className="mt-16">
-                        <button className="bg-orthoGreen text-white px-10 py-4 rounded-full font-bold shadow-lg hover:bg-teal-600 transition">View All Departments</button>
+                        <Link to="/hospitals" className="bg-orthoGreen text-white px-10 py-4 rounded-full font-bold shadow-lg hover:bg-teal-600 transition inline-block">View All Hospitals</Link>
                     </div>
                 </div>
             </section>
@@ -148,7 +149,7 @@ const LandingPage = () => {
                                 <span className="font-bold text-gray-700">Ambulance Dispatch</span>
                             </div>
                         </div>
-                        <button className="bg-orthoDark text-white px-8 py-3 rounded-full font-bold hover:bg-black transition">Learn More</button>
+                        <Link to="/about" className="bg-orthoDark text-white px-8 py-3 rounded-full font-bold hover:bg-black transition inline-block">Learn More</Link>
                     </div>
                 </div>
             </section>

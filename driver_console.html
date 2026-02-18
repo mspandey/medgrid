@@ -367,16 +367,49 @@
 
   <script>
     let dist = 3.2; let interval;
+    let currentAIRecommendation = null;
     const BC = new BroadcastChannel('medigrid');
 
     const $ = id => document.getElementById(id);
     const screens = ['screen-standby', 'screen-offer', 'screen-route', 'screen-arrived'];
     function show(id) { screens.forEach(s => $(s).classList.add('hidden')); $(id).classList.remove('hidden'); }
 
+    async function fetchAIRecommendation() {
+      try {
+        // Mock ambulance location for demo
+        const lat = 27.17;
+        const lon = 75.95;
+        const res = await fetch(`http://localhost:8000/api/hospitals/ai-recommendation?lat=${lat}&lon=${lon}&condition=Cardiac Arrest&blood_group=O+`);
+        const data = await res.json();
+        if (data && data.length > 0) {
+          currentAIRecommendation = data[0];
+          updateOfferUI(currentAIRecommendation);
+        }
+      } catch (e) {
+        console.error("AI Recommendation failed", e);
+      }
+    }
+
+    function updateOfferUI(rec) {
+      const sub = document.querySelector('#screen-offer .d-sub');
+      if (sub) {
+        sub.innerHTML = `Male, 54y · ${rec.distance_km} km away<br><br>
+            <div style="background:#e6fcf5; color:#0ca678; padding:10px; border-radius:8px; font-weight:700; font-size:0.8rem; border:1px solid #0ca678">
+                🤖 AI RECOMMENDED: ${rec.name} (Score: ${rec.score}%)<br>
+                <span style="font-weight:500; font-size:0.7rem;">Optimal match based on Bed Availability & Blood Stock</span>
+            </div>`;
+      }
+
+      // Update route screen hospital name
+      const hospitalVal = document.querySelectorAll('.pt-val')[2];
+      if (hospitalVal) hospitalVal.textContent = rec.name;
+    }
+
     function simulateDispatch() {
       show('screen-offer');
       $('status-badge').textContent = 'Dispatching...';
       $('status-badge').style.background = '#fff9db'; $('status-badge').style.color = '#f59f00';
+      fetchAIRecommendation();
     }
 
     function acceptDispatch() {
@@ -384,7 +417,7 @@
       $('status-badge').textContent = 'En Route';
       $('status-badge').style.background = '#fff0f3'; $('status-badge').style.color = '#D80032';
       $('alert-feed').innerHTML = '';
-      dist = 3.2;
+      dist = currentAIRecommendation ? currentAIRecommendation.distance_km : 3.2;
 
       // Start drive
       interval = setInterval(() => {
@@ -396,9 +429,9 @@
         if (BC) BC.postMessage({ type: 'proximity', dist: dist, ambulance: 'AMB-101', patient: { name: 'John Doe', condition: 'Cardiac Arrest' } });
 
         // Local alerts
-        if (Math.abs(dist - 2.0) < 0.05) addAlert('Hospital notified: Trauma Team Activating');
-        if (Math.abs(dist - 1.0) < 0.05) addAlert('Traffic Signal Preemption Active');
-        if (Math.abs(dist - 0.5) < 0.05) addAlert('Hospital Gate: OPEN');
+        if (Math.abs(dist - 2.0) < 0.05) addAlert('AI Optimization: Route clear to ' + (currentAIRecommendation?.name || 'Hospital'));
+        if (Math.abs(dist - 1.0) < 0.05) addAlert('Automatic Hospital Prep: ICU Room Reserved');
+        if (Math.abs(dist - 0.5) < 0.05) addAlert('Hospital Gate: OPEN (Identified by AI)');
 
       }, 800);
     }

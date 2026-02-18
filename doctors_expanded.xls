@@ -1,0 +1,401 @@
+Doctor_ID,Name,Specialty,Hospital_ID,Is_Available,Experience_Years,On_Call_Emergency
+DOC_2000,Dr. Garner,Nephrologist,HOSP_1014,False,23,False
+DOC_2001,Dr. Hayes,Endocrinologist,HOSP_1017,False,19,True
+DOC_2002,Dr. Henderson,Nephrologist,HOSP_1018,False,27,True
+DOC_2003,Dr. Davis,Psychiatrist,HOSP_1032,True,3,True
+DOC_2004,Dr. Walker,Emergency Medicine Specialist,HOSP_1039,True,19,False
+DOC_2005,Dr. Short,ENT Specialist,HOSP_1048,False,30,False
+DOC_2006,Dr. Garcia,Oncologist,HOSP_1021,False,21,True
+DOC_2007,Dr. Mitchell,General Surgeon,HOSP_1000,True,5,True
+DOC_2008,Dr. Morse,Psychiatrist,HOSP_1036,False,5,False
+DOC_2009,Dr. Hays,Emergency Medicine Specialist,HOSP_1011,True,24,True
+DOC_2010,Dr. Powell,Psychiatrist,HOSP_1015,False,19,True
+DOC_2011,Dr. Freeman,Oncologist,HOSP_1027,True,16,True
+DOC_2012,Dr. Fox,Gastroenterologist,HOSP_1009,True,12,False
+DOC_2013,Dr. Thomas,General Physician,HOSP_1000,True,14,True
+DOC_2014,Dr. Rangel,Endocrinologist,HOSP_1026,False,17,True
+DOC_2015,Dr. Calhoun,Psychiatrist,HOSP_1023,True,5,True
+DOC_2016,Dr. Rodriguez,Oncologist,HOSP_1008,True,28,False
+DOC_2017,Dr. Garcia,Ophthalmologist,HOSP_1030,True,20,False
+DOC_2018,Dr. Frederick,Psychiatrist,HOSP_1016,True,21,True
+DOC_2019,Dr. Baldwin,Orthopedic Surgeon,HOSP_1011,True,21,True
+DOC_2020,Dr. Park,Dermatologist,HOSP_1015,True,21,False
+DOC_2021,Dr. Russell,Urologist,HOSP_1011,False,5,True
+DOC_2022,Dr. Bishop,Gynecologist,HOSP_1034,False,14,True
+DOC_2023,Dr. Pearson,Endocrinologist,HOSP_1001,True,16,True
+DOC_2024,Dr. Ramirez,Emergency Medicine Specialist,HOSP_1049,False,22,False
+DOC_2025,Dr. Holt,Orthopedic Surgeon,HOSP_1043,True,26,True
+DOC_2026,Dr. Martinez,Endocrinologist,HOSP_1007,False,30,True
+DOC_2027,Dr. Flores,Pediatrician,HOSP_1039,True,21,False
+DOC_2028,Dr. Zuniga,Gastroenterologist,HOSP_1047,False,11,True
+DOC_2029,Dr. Powers,Orthopedic Surgeon,HOSP_1041,False,17,True
+DOC_2030,Dr. Hopkins,Pediatrician,HOSP_1046,False,20,True
+DOC_2031,Dr. Lindsey,Cardiologist,HOSP_1015,True,14,True
+DOC_2032,Dr. Sanders,Orthopedic Surgeon,HOSP_1015,False,21,False
+DOC_2033,Dr. Smith,Radiologist,HOSP_1048,False,20,False
+DOC_2034,Dr. Rivera,Ophthalmologist,HOSP_1038,False,3,True
+DOC_2035,Dr. Fleming,ENT Specialist,HOSP_1037,True,4,True
+DOC_2036,Dr. Wolfe,Radiologist,HOSP_1021,False,18,False
+DOC_2037,Dr. Martinez,Oncologist,HOSP_1010,True,25,False
+DOC_2038,Dr. Kelly,Ophthalmologist,HOSP_1008,False,25,True
+DOC_2039,Dr. Benson,ENT Specialist,HOSP_1020,True,22,True
+DOC_2040,Dr. Perkins,Dermatologist,HOSP_1031,False,23,True
+DOC_2041,Dr. Moore,Urologist,HOSP_1000,False,7,True
+DOC_2042,Dr. Hunt,Gastroenterologist,HOSP_1024,False,5,False
+DOC_2043,Dr. Walker,ENT Specialist,HOSP_1021,False,9,False
+DOC_2044,Dr. Jones,Gastroenterologist,HOSP_1042,False,29,True
+DOC_2045,Dr. Robinson,Oncologist,HOSP_1026,True,24,True
+DOC_2046,Dr. Daniel,Pediatrician,HOSP_1041,False,11,False
+DOC_2047,Dr. Hale,Radiologist,HOSP_1047,False,11,True
+DOC_2048,Dr. Davidson,Cardiologist,HOSP_1005,False,23,True
+DOC_2049,Dr. Miller,Urologist,HOSP_1039,True,15,True
+DOC_2050,Dr. Snyder,Ophthalmologist,HOSP_1024,False,16,True
+DOC_2051,Dr. Francis,Cardiologist,HOSP_1036,True,25,False
+DOC_2052,Dr. Allen,Oncologist,HOSP_1004,True,24,False
+DOC_2053,Dr. Ryan,Gastroenterologist,HOSP_1044,True,15,False
+DOC_2054,Dr. Hines,Gynecologist,HOSP_1046,False,20,False
+DOC_2055,Dr. Ortiz,Oncologist,HOSP_1010,False,27,True
+DOC_2056,Dr. Reyes,Psychiatrist,HOSP_1001,True,29,False
+DOC_2057,Dr. Elliott,Pulmonologist,HOSP_1023,True,29,False
+DOC_2058,Dr. Campbell,Orthopedic Surgeon,HOSP_1020,False,27,True
+DOC_2059,Dr. Pineda,Radiologist,HOSP_1029,False,4,False
+DOC_2060,Dr. Aguirre,Emergency Medicine Specialist,HOSP_1017,True,2,False
+DOC_2061,Dr. Powell,Pediatrician,HOSP_1008,True,18,True
+DOC_2062,Dr. Melendez,Pediatrician,HOSP_1028,False,19,True
+DOC_2063,Dr. Cruz,Gynecologist,HOSP_1033,True,13,False
+DOC_2064,Dr. Yang,Radiologist,HOSP_1009,True,9,True
+DOC_2065,Dr. Gutierrez,Pediatrician,HOSP_1022,False,9,True
+DOC_2066,Dr. Hayes,Gastroenterologist,HOSP_1022,False,24,False
+DOC_2067,Dr. Price,Anesthesiologist,HOSP_1007,True,26,False
+DOC_2068,Dr. Greene,Oncologist,HOSP_1035,False,17,False
+DOC_2069,Dr. Cantu,Pulmonologist,HOSP_1035,True,24,False
+DOC_2070,Dr. Morton,Urologist,HOSP_1029,True,15,True
+DOC_2071,Dr. Warren,General Surgeon,HOSP_1046,True,23,False
+DOC_2072,Dr. White,ENT Specialist,HOSP_1033,False,30,False
+DOC_2073,Dr. Morales,General Surgeon,HOSP_1043,False,19,False
+DOC_2074,Dr. Parsons,Radiologist,HOSP_1026,False,3,True
+DOC_2075,Dr. Green,General Physician,HOSP_1014,True,8,True
+DOC_2076,Dr. Coleman,Pediatrician,HOSP_1047,False,10,False
+DOC_2077,Dr. Martinez,Urologist,HOSP_1048,True,7,False
+DOC_2078,Dr. Williams,Cardiologist,HOSP_1049,True,19,True
+DOC_2079,Dr. Arroyo,Gastroenterologist,HOSP_1025,False,8,False
+DOC_2080,Dr. Morris,Oncologist,HOSP_1012,False,29,True
+DOC_2081,Dr. Harrison,Ophthalmologist,HOSP_1011,False,26,True
+DOC_2082,Dr. Morrow,Oncologist,HOSP_1035,True,10,False
+DOC_2083,Dr. Arnold,Anesthesiologist,HOSP_1026,False,18,False
+DOC_2084,Dr. White,Ophthalmologist,HOSP_1003,True,13,False
+DOC_2085,Dr. Moore,Dermatologist,HOSP_1021,False,29,False
+DOC_2086,Dr. Santiago,General Surgeon,HOSP_1040,True,21,False
+DOC_2087,Dr. Sanchez,Cardiologist,HOSP_1015,False,15,False
+DOC_2088,Dr. Gamble,Ophthalmologist,HOSP_1043,False,12,False
+DOC_2089,Dr. Fitzgerald,Ophthalmologist,HOSP_1030,True,14,False
+DOC_2090,Dr. Fowler,General Physician,HOSP_1023,True,15,True
+DOC_2091,Dr. Davis,Orthopedic Surgeon,HOSP_1024,True,6,True
+DOC_2092,Dr. Warren,Gastroenterologist,HOSP_1049,False,11,True
+DOC_2093,Dr. Neal,Gynecologist,HOSP_1005,False,19,True
+DOC_2094,Dr. Carter,General Physician,HOSP_1041,True,5,True
+DOC_2095,Dr. Stokes,Pulmonologist,HOSP_1030,False,10,False
+DOC_2096,Dr. Hartman,Oncologist,HOSP_1008,True,4,False
+DOC_2097,Dr. Walters,Gynecologist,HOSP_1037,True,21,False
+DOC_2098,Dr. Williams,Emergency Medicine Specialist,HOSP_1017,True,6,True
+DOC_2099,Dr. Black,Gynecologist,HOSP_1033,True,20,False
+DOC_2100,Dr. Fernandez,Neurologist,HOSP_1043,False,7,True
+DOC_2101,Dr. Gomez,Pediatrician,HOSP_1039,True,29,True
+DOC_2102,Dr. Smith,General Surgeon,HOSP_1045,True,2,True
+DOC_2103,Dr. Woods,Psychiatrist,HOSP_1036,False,23,True
+DOC_2104,Dr. Richards,Anesthesiologist,HOSP_1025,True,29,True
+DOC_2105,Dr. Schneider,Pediatrician,HOSP_1014,True,26,False
+DOC_2106,Dr. Barrett,Neurologist,HOSP_1029,True,12,False
+DOC_2107,Dr. Morris,Orthopedic Surgeon,HOSP_1019,True,13,False
+DOC_2108,Dr. Callahan,Ophthalmologist,HOSP_1047,True,8,False
+DOC_2109,Dr. Mills,ENT Specialist,HOSP_1009,False,3,False
+DOC_2110,Dr. Mosley,Ophthalmologist,HOSP_1001,True,13,False
+DOC_2111,Dr. Nixon,Gynecologist,HOSP_1043,True,20,False
+DOC_2112,Dr. Stevens,Pulmonologist,HOSP_1000,True,26,False
+DOC_2113,Dr. Rivera,Dermatologist,HOSP_1045,False,10,True
+DOC_2114,Dr. Johnson,Urologist,HOSP_1028,False,10,True
+DOC_2115,Dr. Rogers,Endocrinologist,HOSP_1049,True,11,True
+DOC_2116,Dr. Miller,Anesthesiologist,HOSP_1003,False,11,True
+DOC_2117,Dr. Phillips,Cardiologist,HOSP_1017,True,23,False
+DOC_2118,Dr. Beck,Endocrinologist,HOSP_1044,False,5,False
+DOC_2119,Dr. Payne,Gastroenterologist,HOSP_1024,False,18,False
+DOC_2120,Dr. Vega,Urologist,HOSP_1012,True,30,True
+DOC_2121,Dr. Singh,Cardiologist,HOSP_1037,True,23,False
+DOC_2122,Dr. Pena,Gynecologist,HOSP_1023,False,5,True
+DOC_2123,Dr. Drake,Orthopedic Surgeon,HOSP_1006,True,25,False
+DOC_2124,Dr. Jackson,General Surgeon,HOSP_1026,False,25,False
+DOC_2125,Dr. Collier,Dermatologist,HOSP_1000,True,26,False
+DOC_2126,Dr. Jones,Endocrinologist,HOSP_1017,True,14,False
+DOC_2127,Dr. Stafford,Ophthalmologist,HOSP_1024,False,18,False
+DOC_2128,Dr. Wyatt,Neurologist,HOSP_1023,True,21,True
+DOC_2129,Dr. Davis,Gynecologist,HOSP_1005,False,7,True
+DOC_2130,Dr. Malone,Pulmonologist,HOSP_1041,False,30,True
+DOC_2131,Dr. Oconnor,General Physician,HOSP_1026,True,11,False
+DOC_2132,Dr. Martinez,Cardiologist,HOSP_1015,False,19,False
+DOC_2133,Dr. Garcia,Endocrinologist,HOSP_1007,True,3,True
+DOC_2134,Dr. Martinez,Dermatologist,HOSP_1047,True,15,False
+DOC_2135,Dr. Rogers,Pediatrician,HOSP_1038,True,15,True
+DOC_2136,Dr. Garcia,Orthopedic Surgeon,HOSP_1033,True,30,True
+DOC_2137,Dr. Johnson,Radiologist,HOSP_1040,True,16,False
+DOC_2138,Dr. Boyd,Cardiologist,HOSP_1027,True,19,True
+DOC_2139,Dr. Mckee,Gastroenterologist,HOSP_1035,False,4,True
+DOC_2140,Dr. Robinson,General Physician,HOSP_1001,True,5,True
+DOC_2141,Dr. Frederick,Urologist,HOSP_1041,False,16,False
+DOC_2142,Dr. Leonard,Cardiologist,HOSP_1044,True,26,False
+DOC_2143,Dr. Thomas,Oncologist,HOSP_1005,False,15,True
+DOC_2144,Dr. Christensen,ENT Specialist,HOSP_1014,True,3,True
+DOC_2145,Dr. Jackson,Nephrologist,HOSP_1008,False,19,True
+DOC_2146,Dr. Williams,Neurologist,HOSP_1030,False,15,True
+DOC_2147,Dr. Cunningham,Emergency Medicine Specialist,HOSP_1048,False,13,False
+DOC_2148,Dr. Gould,Pediatrician,HOSP_1024,False,9,True
+DOC_2149,Dr. Mullen,General Physician,HOSP_1001,False,18,True
+DOC_2150,Dr. Johnson,ENT Specialist,HOSP_1048,False,3,False
+DOC_2151,Dr. Spencer,Emergency Medicine Specialist,HOSP_1003,True,29,False
+DOC_2152,Dr. Brown,Radiologist,HOSP_1033,True,13,False
+DOC_2153,Dr. Blair,Dermatologist,HOSP_1024,False,9,False
+DOC_2154,Dr. Holland,Psychiatrist,HOSP_1046,False,21,False
+DOC_2155,Dr. Waters,Pediatrician,HOSP_1027,False,3,False
+DOC_2156,Dr. Schmidt,Gynecologist,HOSP_1021,False,12,False
+DOC_2157,Dr. Miller,Neurologist,HOSP_1036,True,28,False
+DOC_2158,Dr. Walker,Anesthesiologist,HOSP_1011,False,19,False
+DOC_2159,Dr. Velez,Emergency Medicine Specialist,HOSP_1027,False,19,True
+DOC_2160,Dr. Small,General Physician,HOSP_1046,False,25,True
+DOC_2161,Dr. Neal,Ophthalmologist,HOSP_1023,False,26,True
+DOC_2162,Dr. Mora,Ophthalmologist,HOSP_1019,False,9,False
+DOC_2163,Dr. Martin,Pulmonologist,HOSP_1035,False,28,True
+DOC_2164,Dr. Williams,General Physician,HOSP_1036,False,27,True
+DOC_2165,Dr. White,Psychiatrist,HOSP_1005,False,18,False
+DOC_2166,Dr. Ewing,Gynecologist,HOSP_1030,True,29,False
+DOC_2167,Dr. Gordon,Urologist,HOSP_1032,True,7,True
+DOC_2168,Dr. Cooper,Gastroenterologist,HOSP_1002,True,13,False
+DOC_2169,Dr. Hamilton,Urologist,HOSP_1011,True,15,False
+DOC_2170,Dr. Knapp,Endocrinologist,HOSP_1011,False,30,True
+DOC_2171,Dr. Lee,ENT Specialist,HOSP_1035,True,15,False
+DOC_2172,Dr. Francis,ENT Specialist,HOSP_1035,False,11,True
+DOC_2173,Dr. Alvarez,Dermatologist,HOSP_1013,False,29,True
+DOC_2174,Dr. Martinez,Endocrinologist,HOSP_1018,True,14,True
+DOC_2175,Dr. Myers,ENT Specialist,HOSP_1038,True,9,False
+DOC_2176,Dr. Ward,Nephrologist,HOSP_1024,True,11,False
+DOC_2177,Dr. Jensen,Orthopedic Surgeon,HOSP_1004,False,23,True
+DOC_2178,Dr. Baker,Cardiologist,HOSP_1022,True,7,False
+DOC_2179,Dr. Frazier,Neurologist,HOSP_1032,False,27,True
+DOC_2180,Dr. Russell,Psychiatrist,HOSP_1003,True,17,True
+DOC_2181,Dr. Brown,Endocrinologist,HOSP_1041,False,14,True
+DOC_2182,Dr. Jones,ENT Specialist,HOSP_1011,True,6,False
+DOC_2183,Dr. Oconnor,Orthopedic Surgeon,HOSP_1040,False,2,False
+DOC_2184,Dr. Ellis,Psychiatrist,HOSP_1015,True,24,True
+DOC_2185,Dr. Williams,General Surgeon,HOSP_1039,False,21,False
+DOC_2186,Dr. Mclaughlin,Ophthalmologist,HOSP_1013,True,12,True
+DOC_2187,Dr. Riley,Emergency Medicine Specialist,HOSP_1035,True,3,False
+DOC_2188,Dr. Estrada,Gastroenterologist,HOSP_1030,False,29,True
+DOC_2189,Dr. Johnson,Cardiologist,HOSP_1048,False,26,False
+DOC_2190,Dr. Anderson,Anesthesiologist,HOSP_1008,False,24,False
+DOC_2191,Dr. Lane,Anesthesiologist,HOSP_1034,True,26,False
+DOC_2192,Dr. Williams,General Physician,HOSP_1022,True,19,False
+DOC_2193,Dr. Shannon,Orthopedic Surgeon,HOSP_1040,True,6,False
+DOC_2194,Dr. Lee,Dermatologist,HOSP_1019,False,30,True
+DOC_2195,Dr. Santos,Orthopedic Surgeon,HOSP_1008,False,30,True
+DOC_2196,Dr. Lewis,Pulmonologist,HOSP_1035,True,14,False
+DOC_2197,Dr. Mitchell,General Physician,HOSP_1045,True,2,True
+DOC_2198,Dr. Bolton,General Physician,HOSP_1031,True,17,True
+DOC_2199,Dr. Fletcher,General Surgeon,HOSP_1040,False,6,True
+DOC_2200,Dr. Ochoa,General Surgeon,HOSP_1003,False,4,True
+DOC_2201,Dr. Martin,Radiologist,HOSP_1048,True,29,False
+DOC_2202,Dr. Carr,Orthopedic Surgeon,HOSP_1012,False,26,True
+DOC_2203,Dr. Mcdonald,Nephrologist,HOSP_1029,False,19,False
+DOC_2204,Dr. Reynolds,Endocrinologist,HOSP_1022,False,4,False
+DOC_2205,Dr. Adams,Radiologist,HOSP_1042,False,21,False
+DOC_2206,Dr. Martinez,Psychiatrist,HOSP_1010,True,11,True
+DOC_2207,Dr. Castro,Dermatologist,HOSP_1003,False,9,True
+DOC_2208,Dr. Jacobs,ENT Specialist,HOSP_1048,True,10,True
+DOC_2209,Dr. Acosta,Radiologist,HOSP_1012,False,5,False
+DOC_2210,Dr. Hernandez,Radiologist,HOSP_1044,False,24,False
+DOC_2211,Dr. Anderson,Anesthesiologist,HOSP_1035,True,19,True
+DOC_2212,Dr. Sexton,ENT Specialist,HOSP_1049,True,3,False
+DOC_2213,Dr. Reed,Gastroenterologist,HOSP_1002,False,16,False
+DOC_2214,Dr. Porter,Gynecologist,HOSP_1040,True,8,True
+DOC_2215,Dr. Maldonado,Gynecologist,HOSP_1038,False,26,True
+DOC_2216,Dr. Turner,Ophthalmologist,HOSP_1008,False,4,True
+DOC_2217,Dr. Montgomery,Neurologist,HOSP_1007,True,7,False
+DOC_2218,Dr. Brady,ENT Specialist,HOSP_1031,True,5,False
+DOC_2219,Dr. Foley,General Surgeon,HOSP_1002,False,19,True
+DOC_2220,Dr. Gonzales,Psychiatrist,HOSP_1010,False,25,True
+DOC_2221,Dr. Jones,Ophthalmologist,HOSP_1033,False,24,True
+DOC_2222,Dr. Smith,Pediatrician,HOSP_1038,True,18,False
+DOC_2223,Dr. Taylor,Pulmonologist,HOSP_1001,False,30,True
+DOC_2224,Dr. Davis,ENT Specialist,HOSP_1025,False,5,False
+DOC_2225,Dr. Perry,Gastroenterologist,HOSP_1031,True,20,True
+DOC_2226,Dr. Cardenas,Gastroenterologist,HOSP_1021,True,10,False
+DOC_2227,Dr. Pena,Oncologist,HOSP_1049,False,21,True
+DOC_2228,Dr. Holloway,Neurologist,HOSP_1033,False,28,True
+DOC_2229,Dr. Bennett,Ophthalmologist,HOSP_1010,False,9,True
+DOC_2230,Dr. Holt,Psychiatrist,HOSP_1025,True,19,True
+DOC_2231,Dr. Edwards,Orthopedic Surgeon,HOSP_1029,True,29,True
+DOC_2232,Dr. Payne,Dermatologist,HOSP_1012,True,23,False
+DOC_2233,Dr. Anderson,General Physician,HOSP_1044,False,19,False
+DOC_2234,Dr. Hendricks,General Physician,HOSP_1024,True,14,False
+DOC_2235,Dr. Oneill,General Physician,HOSP_1012,True,26,True
+DOC_2236,Dr. Molina,Ophthalmologist,HOSP_1032,False,3,False
+DOC_2237,Dr. Diaz,Orthopedic Surgeon,HOSP_1034,True,3,False
+DOC_2238,Dr. Cervantes,ENT Specialist,HOSP_1023,False,4,True
+DOC_2239,Dr. Bradford,Dermatologist,HOSP_1040,False,12,True
+DOC_2240,Dr. Cruz,Radiologist,HOSP_1045,False,29,False
+DOC_2241,Dr. Phillips,Cardiologist,HOSP_1010,True,12,True
+DOC_2242,Dr. Green,General Physician,HOSP_1014,False,6,True
+DOC_2243,Dr. Brooks,Radiologist,HOSP_1042,False,18,False
+DOC_2244,Dr. Ramsey,Radiologist,HOSP_1031,True,8,False
+DOC_2245,Dr. Smith,General Physician,HOSP_1048,True,25,True
+DOC_2246,Dr. Simmons,Pediatrician,HOSP_1011,False,8,True
+DOC_2247,Dr. Johnson,Psychiatrist,HOSP_1028,False,8,False
+DOC_2248,Dr. Duran,Nephrologist,HOSP_1041,True,6,False
+DOC_2249,Dr. Parker,Dermatologist,HOSP_1048,True,14,True
+DOC_2250,Dr. Salazar,Radiologist,HOSP_1024,False,15,True
+DOC_2251,Dr. Miller,Nephrologist,HOSP_1025,False,20,False
+DOC_2252,Dr. Mckay,Nephrologist,HOSP_1040,True,28,False
+DOC_2253,Dr. Peck,Pulmonologist,HOSP_1048,False,28,True
+DOC_2254,Dr. Snyder,Orthopedic Surgeon,HOSP_1046,True,22,False
+DOC_2255,Dr. Garner,Nephrologist,HOSP_1035,True,17,True
+DOC_2256,Dr. Gardner,Urologist,HOSP_1004,False,29,False
+DOC_2257,Dr. Gonzalez,Dermatologist,HOSP_1048,False,14,False
+DOC_2258,Dr. Robertson,General Surgeon,HOSP_1035,True,13,False
+DOC_2259,Dr. Dean,Emergency Medicine Specialist,HOSP_1037,False,23,True
+DOC_2260,Dr. Faulkner,Emergency Medicine Specialist,HOSP_1038,False,21,True
+DOC_2261,Dr. Young,Pediatrician,HOSP_1039,True,18,False
+DOC_2262,Dr. Meyers,Oncologist,HOSP_1038,False,30,False
+DOC_2263,Dr. Hoover,Anesthesiologist,HOSP_1023,False,27,True
+DOC_2264,Dr. Henson,Ophthalmologist,HOSP_1044,True,24,True
+DOC_2265,Dr. Newman,Psychiatrist,HOSP_1033,True,13,True
+DOC_2266,Dr. Walters,Psychiatrist,HOSP_1004,True,10,True
+DOC_2267,Dr. Johnson,Nephrologist,HOSP_1014,False,6,True
+DOC_2268,Dr. Romero,Endocrinologist,HOSP_1012,False,6,False
+DOC_2269,Dr. Jones,Endocrinologist,HOSP_1014,False,10,True
+DOC_2270,Dr. Riley,Pediatrician,HOSP_1030,False,30,False
+DOC_2271,Dr. Berg,Gynecologist,HOSP_1045,True,5,False
+DOC_2272,Dr. Cowan,Gastroenterologist,HOSP_1002,True,18,False
+DOC_2273,Dr. Green,Gynecologist,HOSP_1026,True,12,True
+DOC_2274,Dr. Mcintosh,ENT Specialist,HOSP_1002,True,28,False
+DOC_2275,Dr. Rice,Endocrinologist,HOSP_1028,False,25,False
+DOC_2276,Dr. Thornton,Neurologist,HOSP_1007,False,8,False
+DOC_2277,Dr. Taylor,General Physician,HOSP_1000,False,25,False
+DOC_2278,Dr. Sanford,Radiologist,HOSP_1032,False,28,False
+DOC_2279,Dr. Villarreal,Psychiatrist,HOSP_1003,True,5,False
+DOC_2280,Dr. Petty,Gynecologist,HOSP_1005,True,3,False
+DOC_2281,Dr. Smith,Pediatrician,HOSP_1009,True,28,False
+DOC_2282,Dr. Holder,Nephrologist,HOSP_1035,True,16,True
+DOC_2283,Dr. Johnson,Endocrinologist,HOSP_1037,False,12,True
+DOC_2284,Dr. Christensen,Pulmonologist,HOSP_1043,True,25,False
+DOC_2285,Dr. Flores,Cardiologist,HOSP_1004,False,26,True
+DOC_2286,Dr. Cole,Endocrinologist,HOSP_1040,True,13,False
+DOC_2287,Dr. Moody,Ophthalmologist,HOSP_1047,True,19,True
+DOC_2288,Dr. Cunningham,Urologist,HOSP_1031,False,14,False
+DOC_2289,Dr. Barron,Pediatrician,HOSP_1043,True,16,True
+DOC_2290,Dr. Collins,Anesthesiologist,HOSP_1000,False,8,True
+DOC_2291,Dr. Webb,Pulmonologist,HOSP_1041,False,26,False
+DOC_2292,Dr. Romero,Pulmonologist,HOSP_1012,True,24,True
+DOC_2293,Dr. Lara,Gynecologist,HOSP_1047,True,9,True
+DOC_2294,Dr. Porter,Gynecologist,HOSP_1011,True,21,True
+DOC_2295,Dr. Golden,Ophthalmologist,HOSP_1014,False,7,True
+DOC_2296,Dr. Irwin,Neurologist,HOSP_1043,True,28,True
+DOC_2297,Dr. Nguyen,General Physician,HOSP_1041,True,6,True
+DOC_2298,Dr. Smith,Ophthalmologist,HOSP_1016,True,4,True
+DOC_2299,Dr. Price,Ophthalmologist,HOSP_1033,False,21,True
+DOC_2300,Dr. Allison,ENT Specialist,HOSP_1023,True,5,False
+DOC_2301,Dr. Sanchez,Neurologist,HOSP_1048,False,13,False
+DOC_2302,Dr. Lopez,Endocrinologist,HOSP_1001,True,13,True
+DOC_2303,Dr. Stevens,Anesthesiologist,HOSP_1024,False,5,False
+DOC_2304,Dr. Fletcher,Urologist,HOSP_1000,False,16,False
+DOC_2305,Dr. Heath,ENT Specialist,HOSP_1034,False,15,True
+DOC_2306,Dr. Lawson,Endocrinologist,HOSP_1042,False,28,True
+DOC_2307,Dr. Rodriguez,Urologist,HOSP_1026,False,30,False
+DOC_2308,Dr. Fuller,Pediatrician,HOSP_1029,False,30,True
+DOC_2309,Dr. Perez,Neurologist,HOSP_1041,False,17,False
+DOC_2310,Dr. Henry,Urologist,HOSP_1043,False,14,True
+DOC_2311,Dr. Anderson,Endocrinologist,HOSP_1020,True,11,False
+DOC_2312,Dr. Cunningham,Endocrinologist,HOSP_1033,False,23,False
+DOC_2313,Dr. Lewis,Urologist,HOSP_1030,True,19,False
+DOC_2314,Dr. Terry,Cardiologist,HOSP_1016,False,16,False
+DOC_2315,Dr. Hoover,Urologist,HOSP_1014,False,13,True
+DOC_2316,Dr. Carter,Gynecologist,HOSP_1049,False,27,True
+DOC_2317,Dr. Montgomery,Pediatrician,HOSP_1032,False,4,False
+DOC_2318,Dr. Russell,General Physician,HOSP_1021,True,4,True
+DOC_2319,Dr. Roberts,Endocrinologist,HOSP_1032,False,5,True
+DOC_2320,Dr. Austin,Endocrinologist,HOSP_1030,False,10,False
+DOC_2321,Dr. Carlson,Oncologist,HOSP_1040,True,27,True
+DOC_2322,Dr. Meza,Neurologist,HOSP_1016,True,12,False
+DOC_2323,Dr. Vasquez,Orthopedic Surgeon,HOSP_1003,False,19,True
+DOC_2324,Dr. Murillo,Gastroenterologist,HOSP_1013,True,7,False
+DOC_2325,Dr. Stone,Gastroenterologist,HOSP_1013,False,22,False
+DOC_2326,Dr. Black,Psychiatrist,HOSP_1010,False,7,False
+DOC_2327,Dr. Sanchez,General Physician,HOSP_1000,False,6,False
+DOC_2328,Dr. Hansen,Urologist,HOSP_1023,False,2,False
+DOC_2329,Dr. Freeman,Psychiatrist,HOSP_1027,True,12,False
+DOC_2330,Dr. Gutierrez,General Physician,HOSP_1027,False,2,False
+DOC_2331,Dr. Graham,Endocrinologist,HOSP_1031,True,11,False
+DOC_2332,Dr. Johnson,Nephrologist,HOSP_1034,True,17,False
+DOC_2333,Dr. Taylor,General Physician,HOSP_1005,False,11,False
+DOC_2334,Dr. Rodriguez,Pulmonologist,HOSP_1017,True,5,False
+DOC_2335,Dr. Johnson,Endocrinologist,HOSP_1003,True,27,False
+DOC_2336,Dr. Mitchell,Cardiologist,HOSP_1002,True,26,True
+DOC_2337,Dr. Miller,Gynecologist,HOSP_1026,True,29,False
+DOC_2338,Dr. Mclean,ENT Specialist,HOSP_1046,True,21,False
+DOC_2339,Dr. Stein,Endocrinologist,HOSP_1005,True,12,True
+DOC_2340,Dr. Brooks,Endocrinologist,HOSP_1022,False,27,True
+DOC_2341,Dr. Collins,Oncologist,HOSP_1021,False,25,False
+DOC_2342,Dr. Brown,Ophthalmologist,HOSP_1022,True,23,True
+DOC_2343,Dr. Ingram,ENT Specialist,HOSP_1038,True,12,True
+DOC_2344,Dr. Robinson,Radiologist,HOSP_1031,True,2,True
+DOC_2345,Dr. Allen,Urologist,HOSP_1045,False,21,False
+DOC_2346,Dr. Robbins,Ophthalmologist,HOSP_1048,False,20,True
+DOC_2347,Dr. Gonzalez,Ophthalmologist,HOSP_1004,False,20,True
+DOC_2348,Dr. Phillips,Neurologist,HOSP_1008,False,5,False
+DOC_2349,Dr. Vasquez,Pulmonologist,HOSP_1007,True,7,True
+DOC_2350,Dr. House,Radiologist,HOSP_1019,True,8,True
+DOC_2351,Dr. Sharp,Orthopedic Surgeon,HOSP_1000,False,16,False
+DOC_2352,Dr. Harrell,Neurologist,HOSP_1018,False,23,False
+DOC_2353,Dr. Hughes,Emergency Medicine Specialist,HOSP_1022,True,29,False
+DOC_2354,Dr. Torres,Radiologist,HOSP_1048,True,23,False
+DOC_2355,Dr. Gibbs,Dermatologist,HOSP_1021,False,19,False
+DOC_2356,Dr. Wright,Gastroenterologist,HOSP_1046,False,27,False
+DOC_2357,Dr. Wood,Psychiatrist,HOSP_1004,False,26,False
+DOC_2358,Dr. Parrish,General Surgeon,HOSP_1000,True,13,False
+DOC_2359,Dr. Gray,Endocrinologist,HOSP_1031,True,15,True
+DOC_2360,Dr. Hall,Cardiologist,HOSP_1020,True,20,True
+DOC_2361,Dr. King,Neurologist,HOSP_1049,True,9,False
+DOC_2362,Dr. Graham,Neurologist,HOSP_1043,True,26,False
+DOC_2363,Dr. Newton,Radiologist,HOSP_1036,False,29,False
+DOC_2364,Dr. Davis,General Surgeon,HOSP_1048,False,14,True
+DOC_2365,Dr. Palmer,Pediatrician,HOSP_1039,True,7,True
+DOC_2366,Dr. Tucker,Gastroenterologist,HOSP_1028,True,29,True
+DOC_2367,Dr. Campbell,General Surgeon,HOSP_1038,True,8,False
+DOC_2368,Dr. Grant,Orthopedic Surgeon,HOSP_1042,False,15,False
+DOC_2369,Dr. Morgan,Gastroenterologist,HOSP_1036,True,9,True
+DOC_2370,Dr. Perez,General Surgeon,HOSP_1031,True,6,False
+DOC_2371,Dr. Lopez,Oncologist,HOSP_1033,True,13,True
+DOC_2372,Dr. King,Pediatrician,HOSP_1001,False,13,True
+DOC_2373,Dr. Jones,Nephrologist,HOSP_1024,False,24,True
+DOC_2374,Dr. Solis,General Physician,HOSP_1047,False,28,True
+DOC_2375,Dr. Mills,Orthopedic Surgeon,HOSP_1000,True,28,True
+DOC_2376,Dr. Mitchell,Anesthesiologist,HOSP_1024,True,25,False
+DOC_2377,Dr. Chen,Emergency Medicine Specialist,HOSP_1040,False,9,False
+DOC_2378,Dr. Rodriguez,Gastroenterologist,HOSP_1044,True,20,True
+DOC_2379,Dr. Gonzalez,Endocrinologist,HOSP_1020,False,12,False
+DOC_2380,Dr. Cuevas,General Surgeon,HOSP_1024,True,21,False
+DOC_2381,Dr. Delgado,Cardiologist,HOSP_1041,True,8,False
+DOC_2382,Dr. Russell,General Surgeon,HOSP_1042,True,11,True
+DOC_2383,Dr. Malone,Endocrinologist,HOSP_1014,False,8,True
+DOC_2384,Dr. Jones,Psychiatrist,HOSP_1028,False,19,True
+DOC_2385,Dr. Sweeney,Nephrologist,HOSP_1034,True,5,False
+DOC_2386,Dr. Johnson,ENT Specialist,HOSP_1008,False,9,True
+DOC_2387,Dr. Coleman,ENT Specialist,HOSP_1004,True,3,False
+DOC_2388,Dr. Gallegos,General Surgeon,HOSP_1044,True,22,False
+DOC_2389,Dr. Cameron,Endocrinologist,HOSP_1035,True,22,False
+DOC_2390,Dr. Robinson,Cardiologist,HOSP_1007,False,5,False
+DOC_2391,Dr. Garcia,Gastroenterologist,HOSP_1046,False,9,True
+DOC_2392,Dr. Reese,Radiologist,HOSP_1040,True,26,False
+DOC_2393,Dr. Martinez,Urologist,HOSP_1019,True,30,False
+DOC_2394,Dr. Williams,Psychiatrist,HOSP_1042,False,17,True
+DOC_2395,Dr. Reid,Gynecologist,HOSP_1035,True,24,True
+DOC_2396,Dr. Coleman,Oncologist,HOSP_1002,False,25,True
+DOC_2397,Dr. Malone,ENT Specialist,HOSP_1040,True,26,True
+DOC_2398,Dr. Dixon,Anesthesiologist,HOSP_1032,True,10,False
+DOC_2399,Dr. Morris,Gynecologist,HOSP_1039,True,9,True

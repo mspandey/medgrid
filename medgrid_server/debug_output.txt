@@ -1,0 +1,4 @@
+Request URL: http://localhost:8001/api/reviews/
+Status Code: 201
+Response Body:
+{"id":1,"hospital":51,"patient":4,"patient_name":"Debug Patient","rating":4,"comment":"Debug comment from script","created_at":"2026-02-18T01:18:24.426752Z"}

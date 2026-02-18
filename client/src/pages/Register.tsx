@@ -16,11 +16,15 @@ const Register = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/auth/register', formData);
-            alert('Registration Successful! Please Login.');
-            navigate('/login', { state: { role: 'hospital' } });
+            await axios.post('http://localhost:8000/api/hospitals/', formData);
+            if (window.confirm('Registration Successful! Would you like to register as a blood donor?')) {
+                navigate('/donate-blood');
+            } else {
+                navigate('/login', { state: { role: 'hospital' } });
+            }
         } catch (err: any) {
-            alert(err.response?.data?.msg || 'Registration Failed');
+            console.error(err);
+            alert(err.response?.data?.msg || err.response?.data?.detail || 'Registration Failed');
         }
     };
 
