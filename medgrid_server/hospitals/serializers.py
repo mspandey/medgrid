@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hospital, Department, Doctor, BloodInventory, Review, Patient, Ambulance, BloodDonor, Bed, EmergencyCase
+from .models import Hospital, Department, Doctor, BloodInventory, Review, Patient, Ambulance, BloodDonor, Bed, EmergencyCase, MedicalRecord
 
 class EmergencyCaseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -122,3 +122,15 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'hospital', 'patient', 'patient_name', 'rating', 'comment', 'created_at']
+class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = '__all__'
+
+class MedicalRecordSerializer(serializers.ModelSerializer):
+    patient_name = serializers.ReadOnlyField(source='patient.name')
+    doctor_name = serializers.ReadOnlyField(source='doctor.name')
+
+    class Meta:
+        model = MedicalRecord
+        fields = '__all__'

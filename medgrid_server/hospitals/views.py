@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Hospital, Doctor, Review, Patient, Ambulance, BloodDonor, Department, BloodInventory, Bed, EmergencyCase
-from .serializers import HospitalSerializer, DoctorSerializer, ReviewSerializer, BloodDonorSerializer, AmbulanceSerializer, BedSerializer, EmergencyCaseSerializer
+from .models import Hospital, Doctor, Review, Patient, Ambulance, BloodDonor, Department, BloodInventory, Bed, EmergencyCase, MedicalRecord
+from .serializers import HospitalSerializer, DoctorSerializer, ReviewSerializer, BloodDonorSerializer, AmbulanceSerializer, BedSerializer, EmergencyCaseSerializer, PatientSerializer, MedicalRecordSerializer
 from .ai_logic import recommend_hospital
 
 class HospitalViewSet(viewsets.ModelViewSet):
@@ -37,6 +37,26 @@ class EmergencyCaseViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(status=status)
             
         return queryset.order_by('-created_at')
+
+class PatientViewSet(viewsets.ModelViewSet):
+    queryset = Patient.objects.all().order_by('-created_at')
+    serializer_class = PatientSerializer
+
+class MedicalRecordViewSet(viewsets.ModelViewSet):
+    queryset = MedicalRecord.objects.all().order_by('-created_at')
+    serializer_class = MedicalRecordSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        patient_id = self.request.query_params.get('patient', None)
+        hospital_id = self.request.query_params.get('hospital', None)
+        
+        if patient_id:
+            queryset = queryset.filter(patient_id=patient_id)
+        if hospital_id:
+            queryset = queryset.filter(hospital_id=hospital_id)
+            
+        return queryset
 
 @api_view(['POST'])
 def hospital_login(request):

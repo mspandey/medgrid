@@ -7,3 +7,11 @@ build
 .vscode
 .idea
 *.log
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+chroma_db/
+media/
+venv/

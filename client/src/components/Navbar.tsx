@@ -21,11 +21,6 @@ const Navbar = ({ user, logout }: NavbarProps) => {
         navigate('/donate-blood');
     };
 
-    const handleDashboardClick = () => {
-        if (user?.role === 'user') navigate('/patient/dashboard');
-        else if (user?.role === 'hospital') navigate('/staff');
-        else if (user?.role === 'ambulance') navigate('/ambulance');
-    };
 
     return (
         <nav className="bg-white shadow-sm sticky top-0 z-50">
@@ -55,7 +50,7 @@ const Navbar = ({ user, logout }: NavbarProps) => {
                         <Link to="/hospitals" className="text-gray-600 hover:text-orthoGreen font-medium">Hospitals</Link>
                         <Link to="/doctors" className="text-gray-600 hover:text-orthoGreen font-medium">Doctors</Link>
 
-                        <div className="relative">
+                        <div className="relative flex items-center gap-2">
                             {user ? (
                                 <div className="flex items-center gap-4">
                                     <span className="font-bold text-gray-800">Hi, {user.name}</span>
@@ -73,7 +68,7 @@ const Navbar = ({ user, logout }: NavbarProps) => {
                                 <>
                                     <button
                                         onClick={handleDonateClick}
-                                        className="flex items-center gap-2 bg-red-50 text-red-600 px-6 py-2.5 rounded-full font-bold hover:bg-red-100 transition border border-red-100 mr-2"
+                                        className="flex items-center gap-2 bg-red-50 text-red-600 px-6 py-2.5 rounded-full font-bold hover:bg-red-100 transition border border-red-100"
                                     >
                                         <Heart size={16} fill="currentColor" /> Donate
                                     </button>
@@ -85,7 +80,7 @@ const Navbar = ({ user, logout }: NavbarProps) => {
                                     </button>
 
                                     {showLoginMenu && (
-                                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                                        <div className="absolute right-0 top-full mt-4 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2">
                                             <button
                                                 onClick={() => handleLoginClick('user')}
                                                 className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 border-b border-gray-50"

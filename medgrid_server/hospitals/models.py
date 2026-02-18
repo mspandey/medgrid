@@ -78,16 +78,37 @@ class Doctor(models.Model):
         return f"{self.name} ({self.specialty})"
 
 class Patient(models.Model):
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+    ]
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     phone = models.CharField(max_length=20, blank=True)
     age = models.IntegerField(default=0)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Male')
     blood_group = models.CharField(max_length=5, blank=True)
+    address = models.TextField(blank=True, null=True)
+    medical_history = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+class MedicalRecord(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records')
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name='medical_records')
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='medical_records')
+    diagnosis = models.TextField()
+    prescription = models.TextField()
+    treatment_date = models.DateField(auto_now_add=True)
+    notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Record for {self.patient.name} at {self.hospital.name}"
 
 class BloodDonor(models.Model):
     # Personal Info

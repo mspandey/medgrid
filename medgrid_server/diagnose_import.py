@@ -9,8 +9,8 @@ django.setup()
 
 try:
     print("Attempting to import models...")
-    from hospitals.models import Review
-    print("Models imported successfully.")
+    from hospitals.models import Review, Patient
+    print(f"Models imported successfully. Patient: {Patient}")
     
     print("Attempting to import serializers...")
     from hospitals.serializers import ReviewSerializer
