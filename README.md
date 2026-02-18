@@ -13,6 +13,19 @@ Whether you are a hospital administrator managing ICU beds, an ambulance driver 
 
 ---
 
+## 💡 MedGrid Values
+
+| Value | What It Means for Us |
+|---|---|
+| ⚡ **Speed** | Every second counts in a medical emergency. MedGrid ensures real-time data is always one click away. |
+| 🔍 **Transparency** | Patients and ambulances see live, accurate data — no guesswork, no outdated records. |
+| 🤝 **Accessibility** | Designed for government hospitals and rural clinics, not just private healthcare. |
+| 🧠 **Intelligence** | AI-powered recommendations and a RAG chatbot make complex decisions simple. |
+| 🩸 **Community** | Blood donor registration connects citizens directly to hospitals that need them. |
+| 🔒 **Reliability** | A system that works when it matters most — during emergencies, disasters, and critical care. |
+
+---
+
 ## ✨ Key Features
 
 ### 🛏️ 1. Real-Time Bed Tracking
@@ -45,6 +58,20 @@ Whether you are a hospital administrator managing ICU beds, an ambulance driver 
 - **Hospital Search:** Search hospitals by name or location.
 - **Hospital Details:** View beds, blood inventory, doctors, and patient reviews.
 - **Review System:** Submit star ratings and comments for hospitals.
+
+---
+
+## 📸 Screenshots
+
+| Page | Preview |
+|---|---|
+| 🏠 **Landing Page** | ![Landing Page](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/landing.png) |
+| 🏥 **Hospital Dashboard** | ![Dashboard](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/dashboard.png) |
+| 🛏️ **Staff Portal — Beds** | ![Staff Portal](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/staff_portal.png) |
+| 🩸 **Blood Donation Form** | ![Blood Donation](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/blood_donation.png) |
+| 🤖 **AI Chatbot** | ![Chatbot](https://raw.githubusercontent.com/Esingh-byte/medgrid/main/screenshots/chatbot.png) |
+
+> 📌 **To add screenshots:** Take screenshots of the app, place them in a `screenshots/` folder at the root of the repo, and push to GitHub. The table above will auto-display them.
 
 ---
 
@@ -130,9 +157,7 @@ venv\Scripts\activate
 source venv/bin/activate
 
 # Install dependencies
-pip install django djangorestframework django-cors-headers \
-            chromadb sentence-transformers huggingface-hub \
-            langchain pandas torch transformers
+pip install -r requirements.txt
 
 # Run migrations
 python manage.py migrate
