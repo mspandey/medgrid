@@ -12,6 +12,7 @@ build
 __pycache__/
 *.py[cod]
 *.sqlite3
+*.mp4
 chroma_db/
 media/
 venv/
