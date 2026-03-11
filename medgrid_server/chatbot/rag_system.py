@@ -213,4 +213,4 @@ Context:
             return "I encountered an error generating a response. Please try again."
 
 # Singleton Accessor
-rag_system = RAGSystem()
+rag_system = None

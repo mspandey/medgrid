@@ -2,10 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .rag_system import RAGSystem
 
-rag = RAGSystem()
+rag = None
 
 @api_view(['POST'])
 def chatbot_response(request):
+    global rag
     user_message = request.data.get('message', '')
     
     if not user_message:
@@ -13,6 +14,9 @@ def chatbot_response(request):
 
     # Generate response using RAG
     try:
+        if rag is None:
+            rag = RAGSystem()
+
         if not rag.initialized:
              # Try re-initializing if failed previously
             rag.__init__()

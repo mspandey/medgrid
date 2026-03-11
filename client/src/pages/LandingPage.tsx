@@ -1,8 +1,53 @@
-import { ArrowRight, Heart, Activity, Stethoscope, BriefcaseMedical } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Heart, Activity, Stethoscope, BriefcaseMedical, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const LandingPage = () => {
+    const [selectedFeature, setSelectedFeature] = useState<{ title: string, desc: string, detail: string, icon: any, color: string, bg: string, img: string, popupImg: string } | null>(null);
+
+    const features = [
+        {
+            title: "ICU Beds Tracking",
+            desc: "Real-time monitoring of ICU beds and critical care resources.",
+            detail: "Our platform integrates directly with hospital management systems to provide up-to-the-minute data on ICU bed availability. This ensures that emergency responders can route critical patients to the nearest facility with immediate capacity, saving vital time.",
+            icon: Heart,
+            color: "text-green-500",
+            bg: "bg-green-50",
+            img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2653&auto=format&fit=crop",
+            popupImg: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?q=80&w=2670&auto=format&fit=crop"
+        },
+        {
+            title: "Diagnosis",
+            desc: "Advanced diagnostic centers connected via the MediGrid network.",
+            detail: "Access a wide network of diagnostic centers equipped with state-of-the-art imaging and laboratory facilities. Results are securely transmitted and instantly available to authorized medical personnel to expedite treatment.",
+            icon: Stethoscope,
+            color: "text-blue-500",
+            bg: "bg-blue-50",
+            img: "https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2670&auto=format&fit=crop",
+            popupImg: "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?q=80&w=2640&auto=format&fit=crop"
+        },
+        {
+            title: "Surgery",
+            desc: "Instant operating theater availability updates for emergency cases.",
+            detail: "Coordinate complex surgical interventions by verifying operating theater schedules and surgical team availability in real time. This minimizes delays for patients requiring emergency surgical care.",
+            icon: BriefcaseMedical,
+            color: "text-purple-500",
+            bg: "bg-purple-50",
+            img: "/features/surgery_room_1773128172379.png",
+            popupImg: "/features/surgery_popup_1773128260176.png"
+        },
+        {
+            title: "Emergency",
+            desc: "Rapid response ambulance dispatch and tracking system.",
+            detail: "Our smart dispatch system utilizes GPS tracking and proprietary routing algorithms to send the closest available ambulance. Once dispatched, hospitals can track the ETA of incoming emergencies to prepare their trauma teams.",
+            icon: Activity,
+            color: "text-red-500",
+            bg: "bg-red-50",
+            img: "/features/ambulance_truck_1773128228029.png",
+            popupImg: "/features/emergency_popup_1773128320010.png"
+        }
+    ];
     return (
         <div className="min-h-screen bg-white font-sans">
             <Navbar />
@@ -79,42 +124,26 @@ const LandingPage = () => {
                     <h2 className="text-4xl font-bold text-orthoDark mb-16">Our Departments</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {/* Cards */}
-                        <div className="group p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                            <div className="w-16 h-16 mx-auto bg-green-50 text-orthoGreen rounded-full flex items-center justify-center mb-6 text-3xl group-hover:bg-orthoGreen group-hover:text-white transition">
-                                <Heart size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-orthoDark mb-3">Cardiology</h3>
-                            <p className="text-gray-500 text-sm leading-relaxed mb-6">Real-time monitoring of ICU beds and cardiac emergency resources.</p>
-                            <a href="#" className="text-orthoGreen font-bold text-sm uppercase group-hover:underline">Read More</a>
-                        </div>
-
-                        <div className="group p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                            <div className="w-16 h-16 mx-auto bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-6 text-3xl group-hover:bg-blue-500 group-hover:text-white transition">
-                                <Stethoscope size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-orthoDark mb-3">Diagnosis</h3>
-                            <p className="text-gray-500 text-sm leading-relaxed mb-6">Advanced diagnostic centers connected via the MediGrid network.</p>
-                            <a href="#" className="text-blue-500 font-bold text-sm uppercase group-hover:underline">Read More</a>
-                        </div>
-
-                        <div className="group p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                            <div className="w-16 h-16 mx-auto bg-purple-50 text-purple-500 rounded-full flex items-center justify-center mb-6 text-3xl group-hover:bg-purple-500 group-hover:text-white transition">
-                                <BriefcaseMedical size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-orthoDark mb-3">Surgery</h3>
-                            <p className="text-gray-500 text-sm leading-relaxed mb-6">Instant operating theater availability updates for emergency cases.</p>
-                            <a href="#" className="text-purple-500 font-bold text-sm uppercase group-hover:underline">Read More</a>
-                        </div>
-
-                        <div className="group p-8 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                            <div className="w-16 h-16 mx-auto bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-6 text-3xl group-hover:bg-red-500 group-hover:text-white transition">
-                                <Activity size={32} />
-                            </div>
-                            <h3 className="text-xl font-bold text-orthoDark mb-3">Emergency</h3>
-                            <p className="text-gray-500 text-sm leading-relaxed mb-6">Rapid response ambulance dispatch and tracking system.</p>
-                            <a href="#" className="text-red-500 font-bold text-sm uppercase group-hover:underline">Read More</a>
-                        </div>
+                        {features.map((feat, idx) => {
+                            const Icon = feat.icon;
+                            return (
+                                <div key={idx} className="group rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden">
+                                    <div className="h-48 w-full bg-gray-200 overflow-hidden relative">
+                                        <img src={feat.img} alt={feat.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                        <div className={`absolute top-4 left-4 w-12 h-12 bg-white ${feat.color} rounded-full flex items-center justify-center shadow-lg`}>
+                                            <Icon size={24} />
+                                        </div>
+                                    </div>
+                                    <div className="p-8">
+                                        <h3 className="text-xl font-bold text-orthoDark mb-3">{feat.title}</h3>
+                                        <p className="text-gray-500 text-sm leading-relaxed mb-6">{feat.desc}</p>
+                                        <button onClick={() => setSelectedFeature(feat)} className={`${feat.color} font-bold text-sm uppercase group-hover:underline flex items-center gap-2`}>
+                                            Read More <ArrowRight size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
 
                     <div className="mt-16">
@@ -153,6 +182,41 @@ const LandingPage = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Read More Modal */}
+            {selectedFeature && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm select-none" onClick={() => setSelectedFeature(null)}>
+                    <div className="bg-white rounded-3xl max-w-xl w-full p-8 relative shadow-2xl animate-in zoom-in-95 duration-200" onClick={(e) => e.stopPropagation()}>
+                        <button onClick={() => setSelectedFeature(null)} className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-800 transition bg-gray-100 hover:bg-gray-200 rounded-full">
+                            <X size={20} />
+                        </button>
+
+                        <div className={`w-16 h-16 ${selectedFeature.bg} ${selectedFeature.color} rounded-2xl flex items-center justify-center mb-6`}>
+                            {<selectedFeature.icon size={32} />}
+                        </div>
+
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">{selectedFeature.title}</h2>
+
+                        <div className="h-48 w-full rounded-2xl overflow-hidden mb-6">
+                            <img src={selectedFeature.popupImg} alt={selectedFeature.title} className="w-full h-full object-cover" />
+                        </div>
+
+                        <p className="text-gray-600 leading-relaxed font-medium mb-4">
+                            {selectedFeature.desc}
+                        </p>
+
+                        <p className="text-gray-500 leading-relaxed">
+                            {selectedFeature.detail}
+                        </p>
+
+                        <div className="mt-8 flex justify-end">
+                            <button onClick={() => setSelectedFeature(null)} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );

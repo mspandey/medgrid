@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Heart, FileText, CheckCircle } from 'lucide-react';
+import { Heart, FileText, CheckCircle, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 const BloodDonation = () => {
@@ -108,9 +108,9 @@ const BloodDonation = () => {
                         </div>
                         <button
                             onClick={() => navigate('/')}
-                            className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-full font-bold hover:bg-black transition"
+                            className="mt-8 bg-white text-gray-800 px-5 py-3 rounded-xl shadow border border-gray-200 font-bold hover:bg-gray-50 flex items-center justify-center gap-2 mx-auto transition-all"
                         >
-                            Back to Home
+                            <ArrowLeft size={20} /> Back to Home
                         </button>
                     </div>
                 ) : (

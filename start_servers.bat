@@ -1,7 +1,7 @@
 @echo off
 echo Starting MedGrid Servers...
 
-start "Django Backend" cmd /k "cd medgrid_server && python manage.py runserver 0.0.0.0:8000"
+start "Django Backend" cmd /k "cd medgrid_server && python manage.py runserver 0.0.0.0:8000 --noreload"
 start "React Frontend" cmd /k "cd client && npm run dev"
 
 echo Servers started!

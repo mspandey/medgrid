@@ -1,0 +1,701 @@
+
+> client@0.0.0 dev
+> vite
+
+
+  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m467[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m6:02:45 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:05:29 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:07:06 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:12:59 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:13:34 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:14:57 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:42:06 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m6:43:12 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m7:18:41 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m7:18:59 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m7:18:59 pm[22m [31m[1m[vite][22m[39m [31mInternal server error:   x Return statement is not allowed here
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:272:1]
+ 269 |         }
+ 270 |     };
+ 271 |     
+ 272 | ,-> return (
+ 273 | |       <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 274 | |           {!isOpen && (
+ 275 | |               <button
+ 276 | |                   onClick={() => setIsOpen(true)}
+ 277 | |                   className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 278 | |               >
+ 279 | |                   <MessageSquare size={28} />
+ 280 | |               </button>
+ 281 | |           )}
+ 282 | |   
+ 283 | |           {isOpen && (
+ 284 | |               <div className="bg-white w-80 md:w-96 h-[500px] max-h-[calc(100vh-100px)] rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-fade-in-up">
+ 285 | |                   {/* Header */}
+ 286 | |                   <div className={`${mode === 'live' ? 'bg-blue-600' : 'bg-green-800'} text-white p-4 flex justify-between items-center transition-colors duration-300 shrink-0`}>
+ 287 | |                       <div className="flex items-center gap-3">
+ 288 | |                           <div className="bg-white/20 p-1.5 rounded-lg">
+ 289 | |                               {mode === 'live' ? <LifeBuoy size={20} /> : <Bot size={20} />}
+ 290 | |                           </div>
+ 291 | |                           <div>
+ 292 | |                               <h3 className="font-bold text-sm">{mode === 'live' ? 'Live Support' : 'MedGrid Assistant'}</h3>
+ 293 | |                               <div className="flex items-center gap-1">
+ 294 | |                                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+ 295 | |                                   <span className="text-xs opacity-80">{mode === 'live' ? 'Agent Active' : 'AI Online'}</span>
+ 296 | |                               </div>
+ 297 | |                           </div>
+ 298 | |                       </div>
+ 299 | |                       <div className="flex items-center gap-2">
+ 300 | |                           {mode === 'bot' && (
+ 301 | |                               <button
+ 302 | |                                   onClick={startLiveChat}
+ 303 | |                                   className="text-xs bg-white/20 hover:bg-white/30 p-1.5 rounded transition flex items-center justify-center"
+ 304 | |                                   title="Talk to a human representative"
+ 305 | |                               >
+ 306 | |                                   <Headset size={18} />
+ 307 | |                               </button>
+ 308 | |                           )}
+ 309 | |                           <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded-lg transition">
+ 310 | |                               <X size={20} />
+ 311 | |                           </button>
+ 312 | |                       </div>
+ 313 | |                   </div>
+ 314 | |   
+ 315 | |                   {/* Messages */}
+ 316 | |                   <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+ 317 | |                       {messages.map((msg) => (
+ 318 | |                           <div key={msg.id} className="w-full flex flex-col space-y-2">
+ 319 | |                               <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+ 320 | |                                   <div className={`max-w-[80%] p-3 rounded-2xl text-sm whitespace-pre-wrap ${msg.sender === 'user'
+ 321 | |                                       ? (mode === 'live' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-green-600 text-white rounded-br-none')
+ 322 | |                                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+ 323 | |                                       }`}>
+ 324 | |                                       {msg.text}
+ 325 | |                                   </div>
+ 326 | |                               </div>
+ 327 | |                               {msg.options && (
+ 328 | |                                   <div className="flex flex-col gap-2 mt-2 w-full justify-start px-2 animate-fade-in-up">
+ 329 | |                                       {msg.options.map((reply, i) => (
+ 330 | |                                           <button
+ 331 | |                                               key={i}
+ 332 | |                                               onClick={() => handleSend(undefined, reply)}
+ 333 | |                                               className="text-sm bg-white text-green-700 hover:bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl transition-all font-medium flex justify-start text-left shadow-sm hover:scale-[1.02]"
+ 334 | |                                           >
+ 335 | |                                               {reply}
+ 336 | |                                           </button>
+ 337 | |                                       ))}
+ 338 | |                                   </div>
+ 339 | |                               )}
+ 340 | |                           </div>
+ 341 | |                       ))}
+ 342 | |                       {loading && (
+ 343 | |                           <div className="flex justify-start">
+ 344 | |                               <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex gap-1">
+ 345 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+ 346 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+ 347 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+ 348 | |                               </div>
+ 349 | |                           </div>
+ 350 | |                       )}
+ 351 | |                       <div ref={messagesEndRef} />
+ 352 | |                   </div>
+ 353 | |   
+ 354 | |                   {/* Input */}
+ 355 | |                   <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+ 356 | |                       <input
+ 357 | |                           type="text"
+ 358 | |                           value={input}
+ 359 | |                           onChange={(e) => setInput(e.target.value)}
+ 360 | |                           placeholder={mode === 'live' ? "Type a message to agent..." : "Ask AI anything..."}
+ 361 | |                           className="flex-1 bg-gray-100 border-0 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+ 362 | |                       />
+ 363 | |                       <button
+ 364 | |                           type="submit"
+ 365 | |                           disabled={loading || !input.trim()}
+ 366 | |                           className={`${mode === 'live' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white p-2 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed`}
+ 367 | |                       >
+ 368 | |                           <Send size={20} />
+ 369 | |                       </button>
+ 370 | |                   </form>
+ 371 | |               </div>
+ 372 | |           )}
+ 373 | |       </div>
+ 374 | `-> );
+ 375 |     };
+ 376 |     
+ 376 |     export default Chatbot;
+     `----
+  x Expression expected
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:375:1]
+ 372 |         )}
+ 373 |     </div>
+ 374 | );
+ 375 | };
+     : ^
+ 376 | 
+ 377 | export default Chatbot;
+     `----
+
+
+Caused by:
+    Syntax Error[39m
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+  
+[2m7:47:50 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error:   x Return statement is not allowed here
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:272:1]
+ 269 |         }
+ 270 |     };
+ 271 |     
+ 272 | ,-> return (
+ 273 | |       <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 274 | |           {!isOpen && (
+ 275 | |               <button
+ 276 | |                   onClick={() => setIsOpen(true)}
+ 277 | |                   className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 278 | |               >
+ 279 | |                   <MessageSquare size={28} />
+ 280 | |               </button>
+ 281 | |           )}
+ 282 | |   
+ 283 | |           {isOpen && (
+ 284 | |               <div className="bg-white w-80 md:w-96 h-[500px] max-h-[calc(100vh-100px)] rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-fade-in-up">
+ 285 | |                   {/* Header */}
+ 286 | |                   <div className={`${mode === 'live' ? 'bg-blue-600' : 'bg-green-800'} text-white p-4 flex justify-between items-center transition-colors duration-300 shrink-0`}>
+ 287 | |                       <div className="flex items-center gap-3">
+ 288 | |                           <div className="bg-white/20 p-1.5 rounded-lg">
+ 289 | |                               {mode === 'live' ? <LifeBuoy size={20} /> : <Bot size={20} />}
+ 290 | |                           </div>
+ 291 | |                           <div>
+ 292 | |                               <h3 className="font-bold text-sm">{mode === 'live' ? 'Live Support' : 'MedGrid Assistant'}</h3>
+ 293 | |                               <div className="flex items-center gap-1">
+ 294 | |                                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+ 295 | |                                   <span className="text-xs opacity-80">{mode === 'live' ? 'Agent Active' : 'AI Online'}</span>
+ 296 | |                               </div>
+ 297 | |                           </div>
+ 298 | |                       </div>
+ 299 | |                       <div className="flex items-center gap-2">
+ 300 | |                           {mode === 'bot' && (
+ 301 | |                               <button
+ 302 | |                                   onClick={startLiveChat}
+ 303 | |                                   className="text-xs bg-white/20 hover:bg-white/30 p-1.5 rounded transition flex items-center justify-center"
+ 304 | |                                   title="Talk to a human representative"
+ 305 | |                               >
+ 306 | |                                   <Headset size={18} />
+ 307 | |                               </button>
+ 308 | |                           )}
+ 309 | |                           <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded-lg transition">
+ 310 | |                               <X size={20} />
+ 311 | |                           </button>
+ 312 | |                       </div>
+ 313 | |                   </div>
+ 314 | |   
+ 315 | |                   {/* Messages */}
+ 316 | |                   <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+ 317 | |                       {messages.map((msg) => (
+ 318 | |                           <div key={msg.id} className="w-full flex flex-col space-y-2">
+ 319 | |                               <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+ 320 | |                                   <div className={`max-w-[80%] p-3 rounded-2xl text-sm whitespace-pre-wrap ${msg.sender === 'user'
+ 321 | |                                       ? (mode === 'live' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-green-600 text-white rounded-br-none')
+ 322 | |                                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+ 323 | |                                       }`}>
+ 324 | |                                       {msg.text}
+ 325 | |                                   </div>
+ 326 | |                               </div>
+ 327 | |                               {msg.options && (
+ 328 | |                                   <div className="flex flex-col gap-2 mt-2 w-full justify-start px-2 animate-fade-in-up">
+ 329 | |                                       {msg.options.map((reply, i) => (
+ 330 | |                                           <button
+ 331 | |                                               key={i}
+ 332 | |                                               onClick={() => handleSend(undefined, reply)}
+ 333 | |                                               className="text-sm bg-white text-green-700 hover:bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl transition-all font-medium flex justify-start text-left shadow-sm hover:scale-[1.02]"
+ 334 | |                                           >
+ 335 | |                                               {reply}
+ 336 | |                                           </button>
+ 337 | |                                       ))}
+ 338 | |                                   </div>
+ 339 | |                               )}
+ 340 | |                           </div>
+ 341 | |                       ))}
+ 342 | |                       {loading && (
+ 343 | |                           <div className="flex justify-start">
+ 344 | |                               <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex gap-1">
+ 345 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+ 346 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+ 347 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+ 348 | |                               </div>
+ 349 | |                           </div>
+ 350 | |                       )}
+ 351 | |                       <div ref={messagesEndRef} />
+ 352 | |                   </div>
+ 353 | |   
+ 354 | |                   {/* Input */}
+ 355 | |                   <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+ 356 | |                       <input
+ 357 | |                           type="text"
+ 358 | |                           value={input}
+ 359 | |                           onChange={(e) => setInput(e.target.value)}
+ 360 | |                           placeholder={mode === 'live' ? "Type a message to agent..." : "Ask AI anything..."}
+ 361 | |                           className="flex-1 bg-gray-100 border-0 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+ 362 | |                       />
+ 363 | |                       <button
+ 364 | |                           type="submit"
+ 365 | |                           disabled={loading || !input.trim()}
+ 366 | |                           className={`${mode === 'live' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white p-2 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed`}
+ 367 | |                       >
+ 368 | |                           <Send size={20} />
+ 369 | |                       </button>
+ 370 | |                   </form>
+ 371 | |               </div>
+ 372 | |           )}
+ 373 | |       </div>
+ 374 | `-> );
+ 375 |     };
+ 376 |     
+ 376 |     export default Chatbot;
+     `----
+  x Expression expected
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:375:1]
+ 372 |         )}
+ 373 |     </div>
+ 374 | );
+ 375 | };
+     : ^
+ 376 | 
+ 377 | export default Chatbot;
+     `----
+
+
+Caused by:
+    Syntax Error
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+[2m7:47:50 pm[22m [31m[1m[vite][22m[39m [31mInternal server error:   x Return statement is not allowed here
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:272:1]
+ 269 |         }
+ 270 |     };
+ 271 |     
+ 272 | ,-> return (
+ 273 | |       <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 274 | |           {!isOpen && (
+ 275 | |               <button
+ 276 | |                   onClick={() => setIsOpen(true)}
+ 277 | |                   className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 278 | |               >
+ 279 | |                   <MessageSquare size={28} />
+ 280 | |               </button>
+ 281 | |           )}
+ 282 | |   
+ 283 | |           {isOpen && (
+ 284 | |               <div className="bg-white w-80 md:w-96 h-[500px] max-h-[calc(100vh-100px)] rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-fade-in-up">
+ 285 | |                   {/* Header */}
+ 286 | |                   <div className={`${mode === 'live' ? 'bg-blue-600' : 'bg-green-800'} text-white p-4 flex justify-between items-center transition-colors duration-300 shrink-0`}>
+ 287 | |                       <div className="flex items-center gap-3">
+ 288 | |                           <div className="bg-white/20 p-1.5 rounded-lg">
+ 289 | |                               {mode === 'live' ? <LifeBuoy size={20} /> : <Bot size={20} />}
+ 290 | |                           </div>
+ 291 | |                           <div>
+ 292 | |                               <h3 className="font-bold text-sm">{mode === 'live' ? 'Live Support' : 'MedGrid Assistant'}</h3>
+ 293 | |                               <div className="flex items-center gap-1">
+ 294 | |                                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+ 295 | |                                   <span className="text-xs opacity-80">{mode === 'live' ? 'Agent Active' : 'AI Online'}</span>
+ 296 | |                               </div>
+ 297 | |                           </div>
+ 298 | |                       </div>
+ 299 | |                       <div className="flex items-center gap-2">
+ 300 | |                           {mode === 'bot' && (
+ 301 | |                               <button
+ 302 | |                                   onClick={startLiveChat}
+ 303 | |                                   className="text-xs bg-white/20 hover:bg-white/30 p-1.5 rounded transition flex items-center justify-center"
+ 304 | |                                   title="Talk to a human representative"
+ 305 | |                               >
+ 306 | |                                   <Headset size={18} />
+ 307 | |                               </button>
+ 308 | |                           )}
+ 309 | |                           <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded-lg transition">
+ 310 | |                               <X size={20} />
+ 311 | |                           </button>
+ 312 | |                       </div>
+ 313 | |                   </div>
+ 314 | |   
+ 315 | |                   {/* Messages */}
+ 316 | |                   <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+ 317 | |                       {messages.map((msg) => (
+ 318 | |                           <div key={msg.id} className="w-full flex flex-col space-y-2">
+ 319 | |                               <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+ 320 | |                                   <div className={`max-w-[80%] p-3 rounded-2xl text-sm whitespace-pre-wrap ${msg.sender === 'user'
+ 321 | |                                       ? (mode === 'live' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-green-600 text-white rounded-br-none')
+ 322 | |                                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+ 323 | |                                       }`}>
+ 324 | |                                       {msg.text}
+ 325 | |                                   </div>
+ 326 | |                               </div>
+ 327 | |                               {msg.options && (
+ 328 | |                                   <div className="flex flex-col gap-2 mt-2 w-full justify-start px-2 animate-fade-in-up">
+ 329 | |                                       {msg.options.map((reply, i) => (
+ 330 | |                                           <button
+ 331 | |                                               key={i}
+ 332 | |                                               onClick={() => handleSend(undefined, reply)}
+ 333 | |                                               className="text-sm bg-white text-green-700 hover:bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl transition-all font-medium flex justify-start text-left shadow-sm hover:scale-[1.02]"
+ 334 | |                                           >
+ 335 | |                                               {reply}
+ 336 | |                                           </button>
+ 337 | |                                       ))}
+ 338 | |                                   </div>
+ 339 | |                               )}
+ 340 | |                           </div>
+ 341 | |                       ))}
+ 342 | |                       {loading && (
+ 343 | |                           <div className="flex justify-start">
+ 344 | |                               <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex gap-1">
+ 345 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+ 346 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+ 347 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+ 348 | |                               </div>
+ 349 | |                           </div>
+ 350 | |                       )}
+ 351 | |                       <div ref={messagesEndRef} />
+ 352 | |                   </div>
+ 353 | |   
+ 354 | |                   {/* Input */}
+ 355 | |                   <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+ 356 | |                       <input
+ 357 | |                           type="text"
+ 358 | |                           value={input}
+ 359 | |                           onChange={(e) => setInput(e.target.value)}
+ 360 | |                           placeholder={mode === 'live' ? "Type a message to agent..." : "Ask AI anything..."}
+ 361 | |                           className="flex-1 bg-gray-100 border-0 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+ 362 | |                       />
+ 363 | |                       <button
+ 364 | |                           type="submit"
+ 365 | |                           disabled={loading || !input.trim()}
+ 366 | |                           className={`${mode === 'live' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white p-2 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed`}
+ 367 | |                       >
+ 368 | |                           <Send size={20} />
+ 369 | |                       </button>
+ 370 | |                   </form>
+ 371 | |               </div>
+ 372 | |           )}
+ 373 | |       </div>
+ 374 | `-> );
+ 375 |     };
+ 376 |     
+ 376 |     export default Chatbot;
+     `----
+  x Expression expected
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:375:1]
+ 372 |         )}
+ 373 |     </div>
+ 374 | );
+ 375 | };
+     : ^
+ 376 | 
+ 377 | export default Chatbot;
+     `----
+
+
+Caused by:
+    Syntax Error[39m
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+  
+[2m8:07:05 pm[22m [31m[1m[vite][22m[39m [31mInternal server error:   x Return statement is not allowed here
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:272:1]
+ 269 |         }
+ 270 |     };
+ 271 |     
+ 272 | ,-> return (
+ 273 | |       <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 274 | |           {!isOpen && (
+ 275 | |               <button
+ 276 | |                   onClick={() => setIsOpen(true)}
+ 277 | |                   className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 278 | |               >
+ 279 | |                   <MessageSquare size={28} />
+ 280 | |               </button>
+ 281 | |           )}
+ 282 | |   
+ 283 | |           {isOpen && (
+ 284 | |               <div className="bg-white w-80 md:w-96 h-[500px] max-h-[calc(100vh-100px)] rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-fade-in-up">
+ 285 | |                   {/* Header */}
+ 286 | |                   <div className={`${mode === 'live' ? 'bg-blue-600' : 'bg-green-800'} text-white p-4 flex justify-between items-center transition-colors duration-300 shrink-0`}>
+ 287 | |                       <div className="flex items-center gap-3">
+ 288 | |                           <div className="bg-white/20 p-1.5 rounded-lg">
+ 289 | |                               {mode === 'live' ? <LifeBuoy size={20} /> : <Bot size={20} />}
+ 290 | |                           </div>
+ 291 | |                           <div>
+ 292 | |                               <h3 className="font-bold text-sm">{mode === 'live' ? 'Live Support' : 'MedGrid Assistant'}</h3>
+ 293 | |                               <div className="flex items-center gap-1">
+ 294 | |                                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+ 295 | |                                   <span className="text-xs opacity-80">{mode === 'live' ? 'Agent Active' : 'AI Online'}</span>
+ 296 | |                               </div>
+ 297 | |                           </div>
+ 298 | |                       </div>
+ 299 | |                       <div className="flex items-center gap-2">
+ 300 | |                           {mode === 'bot' && (
+ 301 | |                               <button
+ 302 | |                                   onClick={startLiveChat}
+ 303 | |                                   className="text-xs bg-white/20 hover:bg-white/30 p-1.5 rounded transition flex items-center justify-center"
+ 304 | |                                   title="Talk to a human representative"
+ 305 | |                               >
+ 306 | |                                   <Headset size={18} />
+ 307 | |                               </button>
+ 308 | |                           )}
+ 309 | |                           <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded-lg transition">
+ 310 | |                               <X size={20} />
+ 311 | |                           </button>
+ 312 | |                       </div>
+ 313 | |                   </div>
+ 314 | |   
+ 315 | |                   {/* Messages */}
+ 316 | |                   <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+ 317 | |                       {messages.map((msg) => (
+ 318 | |                           <div key={msg.id} className="w-full flex flex-col space-y-2">
+ 319 | |                               <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+ 320 | |                                   <div className={`max-w-[80%] p-3 rounded-2xl text-sm whitespace-pre-wrap ${msg.sender === 'user'
+ 321 | |                                       ? (mode === 'live' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-green-600 text-white rounded-br-none')
+ 322 | |                                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+ 323 | |                                       }`}>
+ 324 | |                                       {msg.text}
+ 325 | |                                   </div>
+ 326 | |                               </div>
+ 327 | |                               {msg.options && (
+ 328 | |                                   <div className="flex flex-col gap-2 mt-2 w-full justify-start px-2 animate-fade-in-up">
+ 329 | |                                       {msg.options.map((reply, i) => (
+ 330 | |                                           <button
+ 331 | |                                               key={i}
+ 332 | |                                               onClick={() => handleSend(undefined, reply)}
+ 333 | |                                               className="text-sm bg-white text-green-700 hover:bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl transition-all font-medium flex justify-start text-left shadow-sm hover:scale-[1.02]"
+ 334 | |                                           >
+ 335 | |                                               {reply}
+ 336 | |                                           </button>
+ 337 | |                                       ))}
+ 338 | |                                   </div>
+ 339 | |                               )}
+ 340 | |                           </div>
+ 341 | |                       ))}
+ 342 | |                       {loading && (
+ 343 | |                           <div className="flex justify-start">
+ 344 | |                               <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex gap-1">
+ 345 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+ 346 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+ 347 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+ 348 | |                               </div>
+ 349 | |                           </div>
+ 350 | |                       )}
+ 351 | |                       <div ref={messagesEndRef} />
+ 352 | |                   </div>
+ 353 | |   
+ 354 | |                   {/* Input */}
+ 355 | |                   <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+ 356 | |                       <input
+ 357 | |                           type="text"
+ 358 | |                           value={input}
+ 359 | |                           onChange={(e) => setInput(e.target.value)}
+ 360 | |                           placeholder={mode === 'live' ? "Type a message to agent..." : "Ask AI anything..."}
+ 361 | |                           className="flex-1 bg-gray-100 border-0 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+ 362 | |                       />
+ 363 | |                       <button
+ 364 | |                           type="submit"
+ 365 | |                           disabled={loading || !input.trim()}
+ 366 | |                           className={`${mode === 'live' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white p-2 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed`}
+ 367 | |                       >
+ 368 | |                           <Send size={20} />
+ 369 | |                       </button>
+ 370 | |                   </form>
+ 371 | |               </div>
+ 372 | |           )}
+ 373 | |       </div>
+ 374 | `-> );
+ 375 |     };
+ 376 |     
+ 376 |     export default Chatbot;
+     `----
+  x Expression expected
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:375:1]
+ 372 |         )}
+ 373 |     </div>
+ 374 | );
+ 375 | };
+     : ^
+ 376 | 
+ 377 | export default Chatbot;
+     `----
+
+
+Caused by:
+    Syntax Error[39m
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+  
+[2m8:07:16 pm[22m [31m[1m[vite][22m[39m [31mInternal server error:   x Return statement is not allowed here
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:272:1]
+ 269 |         }
+ 270 |     };
+ 271 |     
+ 272 | ,-> return (
+ 273 | |       <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 274 | |           {!isOpen && (
+ 275 | |               <button
+ 276 | |                   onClick={() => setIsOpen(true)}
+ 277 | |                   className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 278 | |               >
+ 279 | |                   <MessageSquare size={28} />
+ 280 | |               </button>
+ 281 | |           )}
+ 282 | |   
+ 283 | |           {isOpen && (
+ 284 | |               <div className="bg-white w-80 md:w-96 h-[500px] max-h-[calc(100vh-100px)] rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-fade-in-up">
+ 285 | |                   {/* Header */}
+ 286 | |                   <div className={`${mode === 'live' ? 'bg-blue-600' : 'bg-green-800'} text-white p-4 flex justify-between items-center transition-colors duration-300 shrink-0`}>
+ 287 | |                       <div className="flex items-center gap-3">
+ 288 | |                           <div className="bg-white/20 p-1.5 rounded-lg">
+ 289 | |                               {mode === 'live' ? <LifeBuoy size={20} /> : <Bot size={20} />}
+ 290 | |                           </div>
+ 291 | |                           <div>
+ 292 | |                               <h3 className="font-bold text-sm">{mode === 'live' ? 'Live Support' : 'MedGrid Assistant'}</h3>
+ 293 | |                               <div className="flex items-center gap-1">
+ 294 | |                                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+ 295 | |                                   <span className="text-xs opacity-80">{mode === 'live' ? 'Agent Active' : 'AI Online'}</span>
+ 296 | |                               </div>
+ 297 | |                           </div>
+ 298 | |                       </div>
+ 299 | |                       <div className="flex items-center gap-2">
+ 300 | |                           {mode === 'bot' && (
+ 301 | |                               <button
+ 302 | |                                   onClick={startLiveChat}
+ 303 | |                                   className="text-xs bg-white/20 hover:bg-white/30 p-1.5 rounded transition flex items-center justify-center"
+ 304 | |                                   title="Talk to a human representative"
+ 305 | |                               >
+ 306 | |                                   <Headset size={18} />
+ 307 | |                               </button>
+ 308 | |                           )}
+ 309 | |                           <button onClick={() => setIsOpen(false)} className="hover:bg-white/20 p-1 rounded-lg transition">
+ 310 | |                               <X size={20} />
+ 311 | |                           </button>
+ 312 | |                       </div>
+ 313 | |                   </div>
+ 314 | |   
+ 315 | |                   {/* Messages */}
+ 316 | |                   <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+ 317 | |                       {messages.map((msg) => (
+ 318 | |                           <div key={msg.id} className="w-full flex flex-col space-y-2">
+ 319 | |                               <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+ 320 | |                                   <div className={`max-w-[80%] p-3 rounded-2xl text-sm whitespace-pre-wrap ${msg.sender === 'user'
+ 321 | |                                       ? (mode === 'live' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-green-600 text-white rounded-br-none')
+ 322 | |                                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+ 323 | |                                       }`}>
+ 324 | |                                       {msg.text}
+ 325 | |                                   </div>
+ 326 | |                               </div>
+ 327 | |                               {msg.options && (
+ 328 | |                                   <div className="flex flex-col gap-2 mt-2 w-full justify-start px-2 animate-fade-in-up">
+ 329 | |                                       {msg.options.map((reply, i) => (
+ 330 | |                                           <button
+ 331 | |                                               key={i}
+ 332 | |                                               onClick={() => handleSend(undefined, reply)}
+ 333 | |                                               className="text-sm bg-white text-green-700 hover:bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl transition-all font-medium flex justify-start text-left shadow-sm hover:scale-[1.02]"
+ 334 | |                                           >
+ 335 | |                                               {reply}
+ 336 | |                                           </button>
+ 337 | |                                       ))}
+ 338 | |                                   </div>
+ 339 | |                               )}
+ 340 | |                           </div>
+ 341 | |                       ))}
+ 342 | |                       {loading && (
+ 343 | |                           <div className="flex justify-start">
+ 344 | |                               <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-bl-none shadow-sm flex gap-1">
+ 345 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+ 346 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+ 347 | |                                   <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+ 348 | |                               </div>
+ 349 | |                           </div>
+ 350 | |                       )}
+ 351 | |                       <div ref={messagesEndRef} />
+ 352 | |                   </div>
+ 353 | |   
+ 354 | |                   {/* Input */}
+ 355 | |                   <form onSubmit={handleSend} className="p-3 bg-white border-t border-gray-100 flex gap-2">
+ 356 | |                       <input
+ 357 | |                           type="text"
+ 358 | |                           value={input}
+ 359 | |                           onChange={(e) => setInput(e.target.value)}
+ 360 | |                           placeholder={mode === 'live' ? "Type a message to agent..." : "Ask AI anything..."}
+ 361 | |                           className="flex-1 bg-gray-100 border-0 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+ 362 | |                       />
+ 363 | |                       <button
+ 364 | |                           type="submit"
+ 365 | |                           disabled={loading || !input.trim()}
+ 366 | |                           className={`${mode === 'live' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'} text-white p-2 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed`}
+ 367 | |                       >
+ 368 | |                           <Send size={20} />
+ 369 | |                       </button>
+ 370 | |                   </form>
+ 371 | |               </div>
+ 372 | |           )}
+ 373 | |       </div>
+ 374 | `-> );
+ 375 |     };
+ 376 |     
+ 376 |     export default Chatbot;
+     `----
+  x Expression expected
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:375:1]
+ 372 |         )}
+ 373 |     </div>
+ 374 | );
+ 375 | };
+     : ^
+ 376 | 
+ 377 | export default Chatbot;
+     `----
+
+
+Caused by:
+    Syntax Error[39m
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+  
+[2m8:08:42 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m
+[2m8:08:42 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error:   x Expected '</', got '('
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:270:1]
+ 267 |                 <button
+ 268 |                     onClick={() => setIsOpen(true)}
+ 269 |                     className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 270 |                     return (
+     :                            ^
+ 271 |                         <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 272 |                             {!isOpen && (
+ 272 |                                 <button
+     `----
+
+
+Caused by:
+    Syntax Error
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+[2m8:08:42 pm[22m [31m[1m[vite][22m[39m [31mInternal server error:   x Expected '</', got '('
+     ,-[C:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx:270:1]
+ 267 |                 <button
+ 268 |                     onClick={() => setIsOpen(true)}
+ 269 |                     className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center"
+ 270 |                     return (
+     :                            ^
+ 271 |                         <div className="fixed bottom-6 right-6 z-50 font-sans">
+ 272 |                             {!isOpen && (
+ 272 |                                 <button
+     `----
+
+
+Caused by:
+    Syntax Error[39m
+  Plugin: [35mvite:react-swc[39m
+  File: [36mC:/Users/Amisha/OneDrive/Desktop/medgrid/client/src/components/Chatbot.tsx[39m
+  
+[2m8:09:46 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Chatbot.tsx, /src/index.css[22m

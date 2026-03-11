@@ -32,6 +32,7 @@ const Hospitals = ({ user, logout }: HospitalsProps) => {
     const [hospitals, setHospitals] = useState<Hospital[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchHospitals();
@@ -40,6 +41,7 @@ const Hospitals = ({ user, logout }: HospitalsProps) => {
     const fetchHospitals = async () => {
         try {
             setLoading(true);
+            setError(null);
             const res = await axios.get(`http://localhost:8000/api/hospitals/`);
 
             // Add random ratings to each hospital
@@ -76,6 +78,7 @@ const Hospitals = ({ user, logout }: HospitalsProps) => {
             setHospitals(hospitalsWithRatings);
         } catch (err) {
             console.error(err);
+            setError("Could not connect to the backend server. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -116,6 +119,15 @@ const Hospitals = ({ user, logout }: HospitalsProps) => {
 
                 {loading ? (
                     <div className="text-center py-20 text-gray-400">Loading facilities...</div>
+                ) : error ? (
+                    <div className="text-center py-20 bg-red-50 rounded-3xl border border-red-100 shadow-sm mx-auto max-w-2xl">
+                        <div className="bg-red-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Activity className="text-red-400" size={40} />
+                        </div>
+                        <h3 className="text-xl font-bold text-red-500">Connection Error</h3>
+                        <p className="text-red-400 mt-2">{error}</p>
+                        <button onClick={fetchHospitals} className="mt-6 px-6 py-2 bg-red-100 text-red-600 rounded-full font-bold hover:bg-red-200 transition">Try Again</button>
+                    </div>
                 ) : filteredHospitals.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
                         <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -128,7 +140,7 @@ const Hospitals = ({ user, logout }: HospitalsProps) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredHospitals.map(h => {
                             const icu = getDept(h, 'ICU');
-                            const gen = getDept(h, 'General');
+                            const gen = getDept(h, 'General Ward');
                             const isAvailable = (icu.available + gen.available) > 0;
 
                             return (

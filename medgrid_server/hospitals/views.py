@@ -6,11 +6,11 @@ from .serializers import HospitalSerializer, DoctorSerializer, ReviewSerializer,
 from .ai_logic import recommend_hospital
 
 class HospitalViewSet(viewsets.ModelViewSet):
-    queryset = Hospital.objects.all()
+    queryset = Hospital.objects.all().prefetch_related('departments', 'blood_inventory', 'doctors', 'beds')
     serializer_class = HospitalSerializer
 
     def get_queryset(self):
-        queryset = Hospital.objects.all()
+        queryset = Hospital.objects.all().prefetch_related('departments', 'blood_inventory', 'doctors', 'beds')
         # Search params
         location = self.request.query_params.get('location', None)
         search = self.request.query_params.get('search', None)
@@ -43,7 +43,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientSerializer
 
 class MedicalRecordViewSet(viewsets.ModelViewSet):
-    queryset = MedicalRecord.objects.all().order_by('-created_at')
+    queryset = MedicalRecord.objects.all().select_related('patient', 'doctor', 'hospital').order_by('-created_at')
     serializer_class = MedicalRecordSerializer
 
     def get_queryset(self):
@@ -111,15 +111,39 @@ def patient_login(request):
         return Response({'msg': 'Patient not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
-def blood_donation(request):
-    from .models import BloodDonor
-    from .serializers import BloodDonorSerializer
-    
-    serializer = BloodDonorSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({'msg': 'Donor registered successfully'}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def patient_google_auth(request):
+    from .models import Patient
+    email = request.data.get('email')
+    name = request.data.get('name')
+    uid = request.data.get('uid')
+
+    if not email or not uid:
+        return Response({'msg': 'Email and UID are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        patient = Patient.objects.get(email=email)
+        # Log them in 
+        return Response({
+            'token': f'mock-token-{patient.id}',
+            'user': {'id': patient.id, 'name': patient.name, 'role': 'user'}
+        })
+    except Patient.DoesNotExist:
+        # Create a new account automatically
+        try:
+            patient = Patient.objects.create(
+                name=name or 'Google User',
+                email=email,
+                password=uid, # Use Google UID as a dummy password 
+                phone='',
+                age=0,
+                blood_group=''
+            )
+            return Response({
+                'token': f'mock-token-{patient.id}',
+                'user': {'id': patient.id, 'name': patient.name, 'role': 'user'}
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def ambulance_register(request):
@@ -168,7 +192,7 @@ def ambulance_login(request):
         return Response({'msg': 'Ambulance not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all().order_by('-created_at')
+    queryset = Review.objects.all().select_related('patient', 'hospital').order_by('-created_at')
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
