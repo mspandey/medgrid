@@ -61,11 +61,6 @@ Whether you are a hospital administrator managing ICU beds, an ambulance driver 
 
 ---
 
-## 🎬 Project Demo
-
-https://github.com/Esingh-byte/medgrid/releases/download/v1.0.0/medgrid.mp4
-
----
 
 ## 📸 Screenshots
 
