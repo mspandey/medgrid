@@ -347,3 +347,30 @@ Thank you for being a hero. 🦸
         'hospital_address': hospital_address,
     }, status=status.HTTP_201_CREATED)
 
+
+
+ADMIN_SECRET_KEY = 'medgrid_admin_secret'
+
+@api_view(['GET'])
+def admin_stats(request):
+    """Admin-only endpoint: returns platform-wide stats. Protected by X-Admin-Key header."""
+    if request.headers.get('X-Admin-Key') != ADMIN_SECRET_KEY:
+        return Response({'detail': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    hospitals = Hospital.objects.all()
+    patients = Patient.objects.all()
+    ambulances = Ambulance.objects.all()
+    reviews = Review.objects.all()
+    donors = BloodDonor.objects.all()
+
+    return Response({
+        'counts': {
+            'hospitals': hospitals.count(),
+            'patients': patients.count(),
+            'ambulances': ambulances.count(),
+            'reviews': reviews.count(),
+            'donors': donors.count(),
+        },
+        'ambulances': AmbulanceSerializer(ambulances, many=True).data,
+        'donors': BloodDonorSerializer(donors, many=True).data,
+    })

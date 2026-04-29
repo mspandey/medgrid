@@ -24,6 +24,8 @@ import BloodDonation from './pages/BloodDonation';
 
 import About from './pages/About';
 import AmbulanceDashboard from './pages/AmbulanceDashboard';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -64,6 +66,8 @@ function App() {
                     <Route path="/departments" element={<Navigate to="/hospitals" replace />} />
                     <Route path="/donate-blood" element={<BloodDonation />} />
                     <Route path="/staff" element={user && user.role === 'hospital' ? <StaffPortal user={user} logout={handleLogout} /> : <Navigate to="/login" />} />
+                    <Route path="/admin" element={<AdminLogin />} />
+                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 </Routes>
             </div>
         </Router>

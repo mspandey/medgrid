@@ -1,7 +1,7 @@
 from django.urls import path, include
 # Force Reload
 from rest_framework.routers import DefaultRouter
-from .views import HospitalViewSet, hospital_login, patient_login, patient_register, patient_google_auth, blood_donation, ambulance_login, ambulance_register, ReviewViewSet, get_ai_recommendation, toggle_bed_status, toggle_doctor_status, EmergencyCaseViewSet, PatientViewSet, MedicalRecordViewSet
+from .views import HospitalViewSet, hospital_login, patient_login, patient_register, patient_google_auth, blood_donation, ambulance_login, ambulance_register, ReviewViewSet, get_ai_recommendation, toggle_bed_status, toggle_doctor_status, EmergencyCaseViewSet, PatientViewSet, MedicalRecordViewSet, admin_stats
 
 router = DefaultRouter()
 router.register(r'hospitals', HospitalViewSet)
@@ -24,5 +24,6 @@ urlpatterns = [
     path('beds/<int:pk>/toggle', toggle_bed_status),
     path('doctors/<int:pk>/toggle', toggle_doctor_status),
     path('blood-donation', blood_donation),
+    path('admin/stats', admin_stats),
     path('', include(router.urls)),
 ]
