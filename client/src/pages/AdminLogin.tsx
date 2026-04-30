@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Shield, Eye, EyeOff, Lock, AlertTriangle } from 'lucide-react';
 
 const ADMIN_USERNAME = 'medgrid_admin';
-const ADMIN_PASSWORD = 'AmishaPandey@2006';
+const ADMIN_PASSWORD = 'AmishaPandey';
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_SECONDS = 60;
 
