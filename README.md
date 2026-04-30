@@ -239,7 +239,9 @@ npm run dev
 - [ ] SMS Notifications for Emergencies
 - [ ] Government Hospital API Integration
 - [ ] Multi-language Support (Hindi, Tamil, etc.)
-
+- Access the admin portal with
+-  user name-medgrid_admin
+-  password- AmishaPandey
 ---
 
 ## 🤝 Contributing
