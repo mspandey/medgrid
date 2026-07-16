@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Lock, Building } from 'lucide-react';
+import { API_URL } from '../config';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Register = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/api/hospitals/', formData);
+            await axios.post(`${API_URL}/hospitals/`, formData);
             if (window.confirm('Registration Successful! Would you like to register as a blood donor?')) {
                 navigate('/donate-blood');
             } else {

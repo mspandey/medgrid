@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Heart, FileText, CheckCircle, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { API_URL } from '../config';
 
 const BloodDonation = () => {
     const navigate = useNavigate();
@@ -62,7 +63,7 @@ const BloodDonation = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:8000/api/blood-donation', formData);
+            const res = await axios.post(`${API_URL}/blood-donation`, formData);
             setSuccessData({ hospital: res.data.hospital, hospital_address: res.data.hospital_address });
         } catch (err) {
             console.error(err);

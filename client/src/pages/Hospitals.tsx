@@ -5,6 +5,7 @@ import { Search, MapPin, Activity } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { User } from '../App';
 import ReviewSummary from '../components/ReviewSummary';
+import { API_URL } from '../config';
 
 interface Department {
     name: string;
@@ -42,7 +43,7 @@ const Hospitals = ({ user, logout }: HospitalsProps) => {
         try {
             setLoading(true);
             setError(null);
-            const res = await axios.get(`http://localhost:8000/api/hospitals/`);
+            const res = await axios.get(`${API_URL}/hospitals/`);
 
             // Add random ratings to each hospital
             const hospitalsWithRatings = res.data.map((h: any) => {

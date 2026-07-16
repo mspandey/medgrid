@@ -5,6 +5,7 @@ import { MapPin, Phone, Mail, ArrowLeft, Activity, Heart, Baby, Bed, Star, Steth
 import Navbar from '../components/Navbar';
 import { User } from '../App';
 import ReviewList from '../components/ReviewList';
+import { API_URL } from '../config';
 
 interface Department {
     name: string;
@@ -51,7 +52,7 @@ const HospitalDetails = ({ user, logout }: HospitalDetailsProps) => {
     const fetchHospitalDetails = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8000/api/hospitals/${id}/`);
+            const res = await axios.get(`${API_URL}/hospitals/${id}/`);
             setHospital(res.data);
         } catch (err) {
             console.error(err);

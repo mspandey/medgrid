@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapPin, Siren, Activity, ArrowRight, CheckCircle } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 interface Hospital {
     id: number;
@@ -36,7 +37,7 @@ const AmbulanceDashboard = ({ logout }: AmbulanceDashboardProps) => {
 
     const fetchHospitals = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/api/hospitals/');
+            const res = await axios.get(`${API_URL}/hospitals/`);
             setHospitals(res.data);
         } catch (err) {
             console.error(err);
@@ -53,7 +54,7 @@ const AmbulanceDashboard = ({ logout }: AmbulanceDashboardProps) => {
 
     const declareEmergency = async (hospital: Hospital) => {
         try {
-            const res = await axios.post('http://localhost:8000/api/emergencies/', {
+            const res = await axios.post(`${API_URL}/emergencies/`, {
                 ambulance: 1, // Simulation ID
                 hospital: hospital.id,
                 patient_name: currentPatient.name,
@@ -72,7 +73,7 @@ const AmbulanceDashboard = ({ logout }: AmbulanceDashboardProps) => {
                 currentDist = Math.max(0, currentDist - 0.5);
                 setDistance(`${currentDist.toFixed(1)} KM`);
 
-                axios.patch(`http://localhost:8000/api/emergencies/${res.data.id}/`, {
+                axios.patch(`${API_URL}/emergencies/${res.data.id}/`, {
                     distance_km: currentDist.toFixed(2),
                     eta_minutes: Math.ceil(currentDist * 2),
                     status: currentDist <= 0.2 ? 'Arrived' : 'Enroute'
@@ -89,7 +90,7 @@ const AmbulanceDashboard = ({ logout }: AmbulanceDashboardProps) => {
     const confirmArrival = async () => {
         if (activeEmergencyId) {
             try {
-                await axios.patch(`http://localhost:8000/api/emergencies/${activeEmergencyId}/`, {
+                await axios.patch(`${API_URL}/emergencies/${activeEmergencyId}/`, {
                     status: 'Arrived'
                 });
             } catch (err) {

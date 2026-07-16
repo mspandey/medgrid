@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../App';
+import { API_URL } from '../config';
 import StaffChat from '../components/StaffChat';
 
 interface StaffPortalProps {
@@ -45,18 +46,18 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/api/hospitals/${user.id}/`);
+            const res = await axios.get(`${API_URL}/hospitals/${user.id}/`);
             setHospital(res.data);
             if (!hasChanges) {
                 setLocalStats({ departments: res.data.departments || [], blood_inventory: res.data.blood_inventory || [] });
             }
 
             // Also fetch active emergencies
-            const emRes = await axios.get(`http://localhost:8000/api/emergencies/?hospital=${user.id}&status=Enroute`);
+            const emRes = await axios.get(`${API_URL}/emergencies/?hospital=${user.id}&status=Enroute`);
             setActiveEmergencies(emRes.data);
 
             // Fetch Patients
-            const patRes = await axios.get('http://localhost:8000/api/patients/');
+            const patRes = await axios.get(`${API_URL}/patients/`);
             setPatients(patRes.data);
         } catch (err) {
             console.error(err);
@@ -66,7 +67,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
     useEffect(() => {
         const interval = setInterval(() => {
             if (hospital) {
-                axios.get(`http://localhost:8000/api/emergencies/?hospital=${hospital.id}&status=Enroute`)
+                axios.get(`${API_URL}/emergencies/?hospital=${hospital.id}&status=Enroute`)
                     .then(res => setActiveEmergencies(res.data))
                     .catch(err => console.error("Emergency poll failed", err));
             }
@@ -77,7 +78,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
     const handleUpdate = async (updates: any) => {
         if (!hospital) return;
         try {
-            const res = await axios.patch(`http://localhost:8000/api/hospitals/${hospital.id}/`, updates);
+            const res = await axios.patch(`${API_URL}/hospitals/${hospital.id}/`, updates);
             setHospital(res.data);
             setLocalStats({ departments: res.data.departments, blood_inventory: res.data.blood_inventory });
             setHasChanges(false);
@@ -88,7 +89,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
 
     const toggleBed = async (bedId: number) => {
         try {
-            await axios.post(`http://localhost:8000/api/beds/${bedId}/toggle`);
+            await axios.post(`${API_URL}/beds/${bedId}/toggle`);
             fetchData();
         } catch (err) {
             console.error(err);
@@ -284,7 +285,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
                                                 <Clock size={10} /> {doc.shift_timings}
                                             </div>
                                         )}
-                                        <button onClick={() => axios.post(`http://localhost:8000/api/doctors/${doc.id}/toggle`, { type: 'shift' }).then(fetchData)} className={`px-6 py-2 rounded-full text-xs font-black transition ${doc.on_shift ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500 hover:bg-purple-100 hover:text-purple-600'}`}>
+                                        <button onClick={() => axios.post(`${API_URL}/doctors/${doc.id}/toggle`, { type: 'shift' }).then(fetchData)} className={`px-6 py-2 rounded-full text-xs font-black transition ${doc.on_shift ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500 hover:bg-purple-100 hover:text-purple-600'}`}>
                                             {doc.on_shift ? 'ON SHIFT' : 'MARK ON SHIFT'}
                                         </button>
                                     </div>
@@ -320,7 +321,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
                                                 </div>
                                             )}
                                         </div>
-                                        <button onClick={() => axios.post(`http://localhost:8000/api/doctors/${doc.id}/toggle`, { type: 'call' }).then(fetchData)} className={`px-6 py-2 rounded-full text-xs font-black transition ${doc.on_call ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-500 hover:bg-amber-100 hover:text-amber-600'}`}>
+                                        <button onClick={() => axios.post(`${API_URL}/doctors/${doc.id}/toggle`, { type: 'call' }).then(fetchData)} className={`px-6 py-2 rounded-full text-xs font-black transition ${doc.on_call ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-500 hover:bg-amber-100 hover:text-amber-600'}`}>
                                             {doc.on_call ? 'ON CALL' : 'MARK ON CALL'}
                                         </button>
                                     </div>
@@ -485,7 +486,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
                     {patients.map((pat: any) => (
                         <div key={pat.id} onClick={() => {
                             setSelectedPatient(pat);
-                            axios.get(`http://localhost:8000/api/medical-records/?patient=${pat.id}`).then(res => setPatientRecords(res.data));
+                            axios.get(`${API_URL}/medical-records/?patient=${pat.id}`).then(res => setPatientRecords(res.data));
                         }} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition cursor-pointer group">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl group-hover:bg-blue-600 group-hover:text-white transition">
@@ -547,7 +548,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
                                         <div className="text-gray-400 font-bold text-xs uppercase mb-1">ETA</div>
                                         <div className="text-3xl font-black text-red-600">{em.eta_minutes} <span className="text-xs">MIN</span></div>
                                     </div>
-                                    <button onClick={() => axios.patch(`http://localhost:8000/api/emergencies/${em.id}/`, { status: 'Arrived' }).then(fetchData)} className="bg-red-600 text-white px-6 py-3 rounded-2xl font-black hover:bg-red-700 transition shadow-lg shadow-red-200">
+                                    <button onClick={() => axios.patch(`${API_URL}/emergencies/${em.id}/`, { status: 'Arrived' }).then(fetchData)} className="bg-red-600 text-white px-6 py-3 rounded-2xl font-black hover:bg-red-700 transition shadow-lg shadow-red-200">
                                         CONFIRM ARRIVAL
                                     </button>
                                 </div>
@@ -757,7 +758,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
                                 </div>
                             </div>
                             <button onClick={() => {
-                                axios.post('http://localhost:8000/api/patients/', newPatient).then(res => {
+                                axios.post(`${API_URL}/patients/`, newPatient).then(res => {
                                     setPatients([res.data, ...patients]);
                                     setIsAddingPatient(false);
                                     setNewPatient({ name: '', age: '', gender: 'Male', phone: '', blood_group: '', address: '', medical_history: '' });
@@ -791,7 +792,7 @@ const StaffPortal = ({ user, logout }: StaffPortalProps) => {
                                     <textarea value={newRecord.notes} onChange={(e) => setNewRecord({ ...newRecord, notes: e.target.value })} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3 text-sm font-bold text-orthoDark focus:ring-2 focus:ring-orthoGreen/20 transition h-20" />
                                 </div>
                                 <button onClick={() => {
-                                    axios.post('http://localhost:8000/api/medical-records/', {
+                                    axios.post(`${API_URL}/medical-records/`, {
                                         ...newRecord,
                                         patient: selectedPatient.id,
                                         hospital: hospital.id,

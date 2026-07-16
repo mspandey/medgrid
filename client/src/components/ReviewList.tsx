@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Star, User } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface Review {
     id: number;
@@ -25,7 +26,7 @@ const ReviewList = ({ hospitalId }: ReviewListProps) => {
     const fetchReviews = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8000/api/reviews/?hospital=${hospitalId}`);
+            const res = await axios.get(`${API_URL}/reviews/?hospital=${hospitalId}`);
             setReviews(res.data);
         } catch (err) {
             console.error("Failed to fetch reviews", err);

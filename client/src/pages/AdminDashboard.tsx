@@ -5,8 +5,9 @@ import {
     Shield, LogOut, Hospital, Users, Ambulance, Star,
     Droplets, BarChart3, Trash2, RefreshCw, Search,
 } from 'lucide-react';
+import { API_URL } from '../config';
 
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = API_URL;
 const ADMIN_HEADER = { 'X-Admin-Key': 'medgrid_admin_secret' };
 
 type Tab = 'overview' | 'hospitals' | 'patients' | 'ambulances' | 'reviews' | 'donors';

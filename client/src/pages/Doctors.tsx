@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Search, MapPin } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { User } from '../App';
+import { API_URL } from '../config';
 
 interface Doctor {
     name: string;
@@ -35,7 +36,7 @@ const Doctors = ({ user, logout }: DoctorsProps) => {
     const fetchDoctors = async () => {
         try {
             setLoading(true);
-            const res = await axios.get('http://localhost:8000/api/hospitals/');
+            const res = await axios.get(`${API_URL}/hospitals/`);
             const allDocs = res.data.flatMap((h: Hospital) =>
                 (h.doctors || []).map(d => ({
                     ...d,

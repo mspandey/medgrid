@@ -5,6 +5,7 @@ import { Activity, User, Building, ArrowLeft, HeartPulse, Stethoscope } from 'lu
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase';
 import { User as UserType } from '../App';
+import { API_URL } from '../config';
 
 interface LoginProps {
     setUser: (user: UserType) => void;
@@ -41,7 +42,7 @@ const Login = ({ setUser }: LoginProps) => {
         setLoading(true);
         setError('');
 
-        const BASE_URL = 'http://localhost:8000/api';
+        const BASE_URL = API_URL;
 
         try {
             console.log("Starting Auth Process...", { role, mode, email: formData.email });
@@ -134,7 +135,7 @@ const Login = ({ setUser }: LoginProps) => {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
 
-            const BASE_URL = 'http://localhost:8000/api';
+            const BASE_URL = API_URL;
             const res = await axios.post(`${BASE_URL}/auth/patient/google`, {
                 email: user.email,
                 name: user.displayName,

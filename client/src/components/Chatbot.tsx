@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { MessageSquare, X, Send, Bot } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface Message {
     id: string; // Changed to string for Firestore IDs
@@ -237,7 +238,7 @@ const Chatbot = () => {
         setLoading(true);
 
         try {
-            const res = await axios.post('http://localhost:8000/api/chat/ask/', { message: text });
+            const res = await axios.post(`${API_URL}/chat/ask/`, { message: text });
             const botMsg: Message = {
                 id: (Date.now() + 1).toString(),
                 text: res.data.response,

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Star, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { User } from '../App';
+import { API_URL } from '../config';
 
 interface ReviewFormPageProps {
     user?: User | null;
@@ -36,7 +37,7 @@ const ReviewFormPage = ({ user, logout }: ReviewFormPageProps) => {
 
         try {
             setSubmitting(true);
-            await axios.post('http://localhost:8000/api/reviews/', {
+            await axios.post(`${API_URL}/reviews/`, {
                 hospital: id,
                 patient: user.id, // Assuming user.id is the patient ID
                 rating,
